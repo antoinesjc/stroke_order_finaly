@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stroke Order — Mandarin Zest</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --orange:#f37a48;--orange-dark:#d95f2c;--orange-light:#f8dacd;
+    --green:#228b22;--green-dark:#1a6b1a;--green-light:#e0f4e0;
+    --white:#ffffff;--ink:#1c1c1c;--ink-mid:#555555;--ink-light:#999999;
+    --surface:#fdfcfa;--border:#ecddd5;
+  }
+  body{font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+  .topbar{width:100%;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:16px 2rem}
+  .logo-text{font-size:20px;font-weight:600;color:var(--ink);letter-spacing:-0.01em}
+  .logo-text span{color:var(--orange)}
+  .app{width:100%;max-width:640px;padding:2rem 1.25rem 4rem}
+
+  .hero{text-align:center;margin-bottom:2rem}
+  .hero-chars{font-family:'Noto Serif SC',serif;font-size:42px;font-weight:700;letter-spacing:0.1em;margin-bottom:1rem;line-height:1}
+  .hero-chars .c1{color:var(--orange)}
+  .hero-chars .c2{color:var(--green)}
+  .hero-chars .c3{color:var(--orange-light);-webkit-text-stroke:1.5px var(--orange)}
+  .hero-chars .c4{color:var(--green-light);-webkit-text-stroke:1.5px var(--green)}
+  .hero h1{font-size:22px;font-weight:600;letter-spacing:-0.02em;margin-bottom:5px}
+  .hero p{font-size:14px;color:var(--ink-mid)}
+
+  .search-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:1.5rem;margin-bottom:1.25rem;position:relative;overflow:hidden}
+  .search-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--green))}
+  .search-label{font-size:13px;font-weight:500;color:var(--ink-mid);margin-bottom:10px}
+  .search-row{display:flex;gap:10px}
+  .char-input{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:12px 16px;font-family:'Noto Serif SC',serif;font-size:28px;color:var(--ink);outline:none;text-align:center;letter-spacing:0.1em;transition:border-color 0.15s;min-width:0}
+  .char-input:focus{border-color:var(--orange)}
+  .char-input::placeholder{font-family:'Outfit',sans-serif;font-size:14px;letter-spacing:0}
+  .search-btn{background:var(--orange);color:white;border:none;border-radius:12px;padding:12px 20px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background 0.15s}
+  .search-btn:hover{background:var(--orange-dark)}
+
+  .loading-msg{text-align:center;padding:1.5rem;color:var(--ink-mid);font-size:14px;display:none}
+  .spinner{width:32px;height:32px;border:3px solid var(--orange-light);border-top-color:var(--orange);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 10px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .error-msg{background:#fdecea;border:1px solid #e05a4a;border-radius:16px;padding:1.25rem;color:#c0392b;font-size:14px;text-align:center;display:none;margin-bottom:1rem}
+
+  .display-area{display:none}
+
+  .char-info-bar{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1rem;display:flex;align-items:center;gap:1.25rem}
+  .char-big{font-family:'Noto Serif SC',serif;font-size:56px;font-weight:700;color:var(--ink);line-height:1;flex-shrink:0}
+  .char-details{flex:1;min-width:0}
+  .char-pinyin{font-size:20px;color:var(--orange);font-weight:400;letter-spacing:0.06em;margin-bottom:3px}
+  .char-meaning{font-size:14px;color:var(--ink-mid);line-height:1.5;margin-bottom:6px}
+  .char-tags{display:flex;gap:7px;flex-wrap:wrap}
+  .char-tag{background:var(--orange-light);color:var(--orange-dark);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:500}
+
+  .writer-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:1.5rem;margin-bottom:1rem;position:relative;overflow:hidden}
+  .writer-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--green))}
+  .writer-card-title{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-light);margin-bottom:1rem}
+
+  .tab-row{display:flex;gap:0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:3px;margin-bottom:1.25rem}
+  .tab-btn{flex:1;padding:8px 10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;color:var(--ink-mid);background:transparent;border:none;border-radius:9px;cursor:pointer;transition:all 0.15s}
+  .tab-btn.active{background:var(--white);color:var(--orange);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+
+  .canvas-wrap{display:flex;justify-content:center;margin-bottom:1.25rem;position:relative}
+  #hanzi-target{background:var(--surface);border-radius:12px}
+  .stroke-counter{position:absolute;top:8px;right:8px;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:500;color:var(--ink-mid)}
+  .stroke-counter span{color:var(--orange);font-weight:700}
+
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:1rem}
+  .ctrl-btn{display:flex;align-items:center;gap:6px;background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:9px 16px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;color:var(--ink);cursor:pointer;transition:all 0.12s}
+  .ctrl-btn:hover{border-color:var(--orange);color:var(--orange)}
+  .ctrl-btn.primary{background:var(--orange);border-color:var(--orange);color:white}
+  .ctrl-btn.primary:hover{background:var(--orange-dark);border-color:var(--orange-dark);color:white}
+  .ctrl-btn.green-btn{background:var(--green);border-color:var(--green);color:white}
+  .ctrl-btn.green-btn:hover{background:var(--green-dark);border-color:var(--green-dark)}
+  .ctrl-btn:disabled{opacity:0.35;cursor:default;pointer-events:none}
+
+  .speed-row{display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:10px;padding:10px 14px}
+  .speed-label{font-size:12px;color:var(--ink-light);white-space:nowrap;font-weight:500}
+  .speed-row input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:10px;background:var(--orange-light);outline:none;cursor:pointer}
+  .speed-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--orange);border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.15)}
+  .speed-val{font-size:12px;font-weight:600;color:var(--orange);min-width:28px;text-align:right}
+
+  .stroke-dots{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:0.75rem}
+  .stroke-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background 0.2s}
+  .stroke-dot.done{background:var(--orange)}
+  .stroke-dot.current{background:var(--green);transform:scale(1.3)}
+
+  .quiz-hint{text-align:center;font-size:13px;color:var(--ink-mid);margin-bottom:0.75rem}
+  .quiz-result{text-align:center;padding:12px;border-radius:12px;font-size:14px;font-weight:500;margin-top:0.75rem;display:none}
+  .quiz-result.ok{background:var(--green-light);color:var(--green)}
+  .quiz-result.err{background:#fdecea;color:#c0392b}
+
+  .breakdown-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.25rem;margin-bottom:1rem}
+  .breakdown-title{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-light);margin-bottom:0.75rem}
+  .breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:8px}
+  .breakdown-item{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:6px;text-align:center;}
+  .breakdown-num{font-size:10px;color:var(--ink-light);margin-bottom:2px}
+  .breakdown-svg{width:38px;height:38px}
+
+  .credit{text-align:center;font-size:11px;color:var(--ink-light);margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)}
+  .credit a{color:var(--orange);text-decoration:none}
+  .credit a:hover{text-decoration:underline}
+
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .fade-in{animation:fadeIn 0.3s ease forwards}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo-text">Mandarin <span>Zest</span></div>
+</div>
+
+<div class="app">
+
+  <div class="hero">
+    <div class="hero-chars"><span class="c1">笔</span><span class="c2">顺</span><span class="c3">练</span><span class="c4">习</span></div>
+    <h1>Chinese Stroke Order</h1>
+    <p>Animate and practise any Chinese character stroke by stroke</p>
+  </div>
+
+  <div class="search-card">
+    <div class="search-label">Enter any Chinese character</div>
+    <div class="search-row">
+      <input class="char-input" id="charInput" type="text" maxlength="2" placeholder="e.g. 你" autocomplete="off" autocorrect="off" spellcheck="false">
+      <button class="search-btn" onclick="loadChar()">Show strokes →</button>
+    </div>
+  </div>
+
+  <div class="loading-msg" id="loadingMsg">
+    <div class="spinner"></div>
+    Loading character data…
+  </div>
+
+  <div class="error-msg" id="errorMsg"></div>
+
+  <div class="display-area" id="displayArea">
+    <div class="char-info-bar fade-in">
+      <div class="char-big" id="infoBig"></div>
+      <div class="char-details">
+        <div class="char-pinyin" id="infoPinyin"></div>
+        <div class="char-meaning" id="infoMeaning"></div>
+        <div class="char-tags" id="infoTags"></div>
+      </div>
+    </div>
+
+    <div class="writer-card fade-in">
+      <div class="writer-card-title">Stroke order</div>
+      <div class="tab-row">
+        <button class="tab-btn active" id="tabAnimate" onclick="switchTab('animate')">▶ Animate</button>
+        <button class="tab-btn" id="tabQuiz"    onclick="switchTab('quiz')">✏ Practise</button>
+      </div>
+      <div class="canvas-wrap">
+        <div id="hanzi-target"></div>
+        <div class="stroke-counter">Strokes: <span id="strokeCount">—</span></div>
+      </div>
+
+      <div id="animateControls">
+        <div class="controls">
+          <button class="ctrl-btn primary" id="btnAnimate" onclick="doAnimate()">▶ Play</button>
+          <button class="ctrl-btn" onclick="doReset()">↺ Reset</button>
+          <button class="ctrl-btn green-btn" id="btnLoop" onclick="doLoopToggle()">⟳ Loop: Off</button>
+        </div>
+        <div class="speed-row">
+          <div class="speed-label">Speed</div>
+          <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1" oninput="updateSpeed()">
+          <div class="speed-val" id="speedVal">1×</div>
+        </div>
+        <div class="stroke-dots" id="animDots"></div>
+      </div>
+
+      <div id="quizControls" style="display:none">
+        <div class="quiz-hint">Draw the character stroke by stroke in the correct order</div>
+        <div class="controls">
+          <button class="ctrl-btn primary" onclick="startQuiz()">✏ Start practise</button>
+          <button class="ctrl-btn" onclick="doReset()">↺ Reset</button>
+        </div>
+        <div class="quiz-result" id="quizResult"></div>
+      </div>
+    </div>
+
+    <div class="breakdown-card fade-in">
+      <div class="breakdown-title">Individual strokes</div>
+      <div class="breakdown-grid" id="breakdownGrid"></div>
+    </div>
+  </div>
+
+  <div class="credit">
+    Stroke data powered by <a href="https://hanziwriter.org" target="_blank">HanziWriter</a> &amp; the open-source <a href="https://github.com/skishore/makemeahanzi" target="_blank">Make Me a Hanzi</a> dataset
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<script>
+// Convert tone-numbered pinyin to diacritic form (e.g. "ni3" → "nǐ")
+function toMark(pinyin) {
+  if (!pinyin) return '';
+  const vowels = {
+    a:['a','ā','á','ǎ','à'], e:['e','ē','é','ě','è'],
+    i:['i','ī','í','ǐ','ì'], o:['o','ō','ó','ǒ','ò'],
+    u:['u','ū','ú','ǔ','ù'], v:['ü','ǖ','ǘ','ǚ','ǜ'],
+  };
+  return pinyin.toLowerCase().split(/\s+/).map(syl => {
+    const tone = parseInt(syl.slice(-1));
+    if (!tone || tone < 1 || tone > 4) return syl.replace(/\d/g,'');
+    const base = syl.slice(0,-1);
+    for (const v of ['a','e']) {
+      if (base.includes(v)) return base.replace(v, vowels[v][tone]);
+    }
+    if (base.includes('ou')) return base.replace('o', vowels.o[tone]);
+    for (let j = base.length-1; j >= 0; j--) {
+      const c = base[j];
+      if (vowels[c]) return base.slice(0,j)+vowels[c][tone]+base.slice(j+1);
+    }
+    return base;
+  }).join(' ');
+}
+
+// ── Pinyin + Meaning lookup — hardcoded, zero network requests ──
+// Covers HSK 1-6 + most common 2500 characters
+
+const PINYIN = {
+  // Numbers & quantities
+  '一':'yī','二':'èr','三':'sān','四':'sì','五':'wǔ','六':'liù','七':'qī','八':'bā','九':'jiǔ','十':'shí',
+  '百':'bǎi','千':'qiān','万':'wàn','亿':'yì','零':'líng','两':'liǎng','双':'shuāng','半':'bàn',
+  '第':'dì','数':'shù','量':'liàng','倍':'bèi','多':'duō','少':'shǎo','几':'jǐ','些':'xiē',
+  // Pronouns & particles
+  '我':'wǒ','你':'nǐ','他':'tā','她':'tā','它':'tā','我们':'wǒmen','你们':'nǐmen','他们':'tāmen',
+  '这':'zhè','那':'nà','哪':'nǎ','谁':'shuí','什':'shén','么':'me','的':'de','地':'de','得':'de',
+  '了':'le','着':'zhe','过':'guò','吗':'ma','呢':'ne','吧':'ba','啊':'a','哦':'ó','哈':'hā',
+  '呀':'ya','嗯':'ń','哎':'āi','喂':'wèi','嘛':'ma','啦':'la',
+  // Common verbs
+  '是':'shì','有':'yǒu','不':'bù','没':'méi','在':'zài','会':'huì','能':'néng','可':'kě',
+  '要':'yào','想':'xiǎng','喜':'xǐ','爱':'ài','恨':'hèn','怕':'pà','知':'zhī','道':'dào',
+  '说':'shuō','话':'huà','问':'wèn','答':'dá','听':'tīng','看':'kàn','见':'jiàn','写':'xiě',
+  '读':'dú','学':'xué','习':'xí','教':'jiāo','买':'mǎi','卖':'mài','用':'yòng','做':'zuò',
+  '来':'lái','去':'qù','到':'dào','走':'zǒu','跑':'pǎo','坐':'zuò','站':'zhàn','起':'qǐ',
+  '吃':'chī','喝':'hē','睡':'shuì','玩':'wán','开':'kāi','关':'guān','给':'gěi','拿':'ná',
+  '放':'fàng','带':'dài','打':'dǎ','叫':'jiào','让':'ràng','帮':'bāng','找':'zhǎo','送':'sòng',
+  '接':'jiē','推':'tuī','拉':'lā','跳':'tiào','飞':'fēi','游':'yóu','唱':'chàng','跳':'tiào',
+  '画':'huà','看':'kàn','借':'jiè','还':'huán','买':'mǎi','付':'fù','花':'huā','存':'cún',
+  '取':'qǔ','换':'huàn','选':'xuǎn','决':'jué','定':'dìng','想':'xiǎng','觉':'jué','感':'gǎn',
+  '认':'rèn','识':'shí','了':'liǎo','解':'jiě','明':'míng','白':'bái','懂':'dǒng','忘':'wàng',
+  '记':'jì','想':'xiǎng','念':'niàn','希':'xī','望':'wàng','相':'xiāng','信':'xìn','怀':'huái',
+  '爱':'ài','恋':'liàn','结':'jié','婚':'hūn','离':'lí','生':'shēng','死':'sǐ','活':'huó',
+  '工':'gōng','作':'zuò','休':'xiū','息':'xī','玩':'wán','乐':'lè','笑':'xiào','哭':'kū',
+  '高':'gāo','兴':'xìng','快':'kuài','乐':'lè','难':'nán','过':'guò','生':'shēng','气':'qì',
+  '担':'dān','心':'xīn','害':'hài','怕':'pà','紧':'jǐn','张':'zhāng','放':'fàng','松':'sōng',
+  '加':'jiā','减':'jiǎn','乘':'chéng','除':'chú','等':'děng','算':'suàn','比':'bǐ','较':'jiào',
+  '变':'biàn','化':'huà','发':'fā','展':'zhǎn','进':'jìn','步':'bù','提':'tí','高':'gāo',
+  '增':'zēng','减':'jiǎn','控':'kòng','制':'zhì','管':'guǎn','理':'lǐ','组':'zǔ','织':'zhī',
+  '建':'jiàn','立':'lì','创':'chuàng','造':'zào','发':'fā','明':'míng','研':'yán','究':'jiū',
+  '分':'fēn','析':'xī','总':'zǒng','结':'jié','描':'miáo','述':'shù','解':'jiě','释':'shì',
+  '表':'biǎo','示':'shì','说':'shuō','明':'míng','证':'zhèng','明':'míng','验':'yàn','证':'zhèng',
+  '修':'xiū','改':'gǎi','完':'wán','成':'chéng','实':'shí','现':'xiàn','达':'dá','到':'dào',
+  '继':'jì','续':'xù','停':'tíng','止':'zhǐ','开':'kāi','始':'shǐ','结':'jié','束':'shù',
+  '参':'cān','加':'jiā','举':'jǔ','办':'bàn','安':'ān','排':'pái','准':'zhǔn','备':'bèi',
+  '计':'jì','划':'huà','设':'shè','计':'jì','制':'zhì','作':'zuò','生':'shēng','产':'chǎn',
+  '销':'xiāo','售':'shòu','服':'fú','务':'wù','提':'tí','供':'gōng','需':'xū','要':'yào',
+  '支':'zhī','持':'chí','反':'fǎn','对':'duì','同':'tóng','意':'yì','拒':'jù','绝':'jué',
+  '接':'jiē','受':'shòu','拒':'jù','绝':'jué','允':'yǔn','许':'xǔ','禁':'jìn','止':'zhǐ',
+  // Directions & positions
+  '上':'shàng','下':'xià','左':'zuǒ','右':'yòu','前':'qián','后':'hòu','里':'lǐ','外':'wài',
+  '中':'zhōng','间':'jiān','边':'biān','面':'miàn','北':'běi','南':'nán','东':'dōng','西':'xī',
+  '旁':'páng','附':'fù','近':'jìn','远':'yuǎn','内':'nèi','外':'wài','侧':'cè','端':'duān',
+  // People & family
+  '人':'rén','男':'nán','女':'nǚ','孩':'hái','子':'zǐ','儿':'ér','父':'fù','母':'mǔ','爸':'bà',
+  '妈':'mā','哥':'gē','弟':'dì','姐':'jiě','妹':'mèi','朋':'péng','友':'yǒu','家':'jiā',
+  '亲':'qīn','爷':'yé','奶':'nǎi','叔':'shū','姑':'gū','舅':'jiù','阿':'ā','姨':'yí',
+  '夫':'fū','妻':'qī','丈':'zhàng','夫':'fu','老':'lǎo','师':'shī','学':'xué','生':'shēng',
+  '同':'tóng','学':'xué','同':'tóng','事':'shì','邻':'lín','居':'jū','客':'kè','人':'rén',
+  '主':'zhǔ','人':'rén','客':'kè','人':'rén','陌':'mò','生':'shēng','人':'rén','公':'gōng',
+  '民':'mín','市':'shì','民':'mín','国':'guó','民':'mín','公':'gōng','民':'mín',
+  // Adjectives - size, shape, quality
+  '大':'dà','小':'xiǎo','高':'gāo','低':'dī','长':'cháng','短':'duǎn','宽':'kuān','窄':'zhǎi',
+  '厚':'hòu','薄':'báo','重':'zhòng','轻':'qīng','粗':'cū','细':'xì','圆':'yuán','方':'fāng',
+  '直':'zhí','弯':'wān','平':'píng','尖':'jiān','钝':'dùn','硬':'yìng','软':'ruǎn','强':'qiáng',
+  '弱':'ruò','快':'kuài','慢':'màn','早':'zǎo','晚':'wǎn','新':'xīn','旧':'jiù','老':'lǎo',
+  '年':'nián','轻':'qīng','热':'rè','冷':'lěng','暖':'nuǎn','凉':'liáng','干':'gān','湿':'shī',
+  '清':'qīng','洁':'jié','脏':'zāng','净':'jìng','空':'kōng','满':'mǎn','多':'duō','少':'shǎo',
+  '好':'hǎo','坏':'huài','美':'měi','丑':'chǒu','对':'duì','错':'cuò','真':'zhēn','假':'jiǎ',
+  '难':'nán','易':'yì','贵':'guì','便':'pián','忙':'máng','闲':'xián','累':'lèi','饿':'è',
+  '渴':'kě','饱':'bǎo','病':'bìng','健':'jiàn','康':'kāng','安':'ān','全':'quán','危':'wēi',
+  '险':'xiǎn','重':'zhòng','要':'yào','特':'tè','别':'bié','普':'pǔ','通':'tōng','一':'yī',
+  '般':'bān','正':'zhèng','式':'shì','非':'fēi','正':'zhèng','式':'shì','公':'gōng','开':'kāi',
+  '私':'sī','秘':'mì','密':'mì','公':'gōng','平':'píng','等':'děng','公':'gōng','正':'zhèng',
+  '合':'hé','法':'fǎ','违':'wéi','法':'fǎ','严':'yán','格':'gé','宽':'kuān','松':'sōng',
+  '认':'rèn','真':'zhēn','粗':'cū','心':'xīn','谦':'qiān','虚':'xū','骄':'jiāo','傲':'ào',
+  '勇':'yǒng','敢':'gǎn','胆':'dǎn','小':'xiǎo','诚':'chéng','实':'shí','狡':'jiǎo','猾':'huá',
+  '聪':'cōng','明':'míng','愚':'yú','蠢':'chǔn','勤':'qín','劳':'láo','懒':'lǎn','惰':'duò',
+  '热':'rè','情':'qíng','冷':'lěng','漠':'mò','温':'wēn','柔':'róu','粗':'cū','暴':'bào',
+  '礼':'lǐ','貌':'mào','无':'wú','礼':'lǐ','友':'yǒu','好':'hǎo','善':'shàn','良':'liáng',
+  // Colors
+  '红':'hóng','橙':'chéng','黄':'huáng','绿':'lǜ','蓝':'lán','紫':'zǐ','白':'bái','黑':'hēi',
+  '灰':'huī','粉':'fěn','金':'jīn','银':'yín','棕':'zōng','褐':'hè','青':'qīng','透':'tòu',
+  '明':'míng','亮':'liàng','暗':'àn','深':'shēn','浅':'qiǎn','鲜':'xiān','艳':'yàn',
+  // Nature & environment
+  '天':'tiān','地':'dì','水':'shuǐ','火':'huǒ','山':'shān','石':'shí','土':'tǔ','木':'mù',
+  '草':'cǎo','花':'huā','树':'shù','林':'lín','森':'sēn','风':'fēng','雨':'yǔ','雪':'xuě',
+  '云':'yún','雷':'léi','电':'diàn','冰':'bīng','霜':'shuāng','雾':'wù','露':'lù',
+  '日':'rì','月':'yuè','星':'xīng','光':'guāng','空':'kōng','气':'qì','海':'hǎi',
+  '河':'hé','湖':'hú','江':'jiāng','溪':'xī','泉':'quán','波':'bō','浪':'làng','潮':'cháo',
+  '岸':'àn','岛':'dǎo','峰':'fēng','谷':'gǔ','平':'píng','原':'yuán','沙':'shā','漠':'mò',
+  '土':'tǔ','地':'dì','田':'tián','野':'yě','园':'yuán','农':'nóng','田':'tián','庄':'zhuāng',
+  '植':'zhí','物':'wù','动':'dòng','物':'wù','矿':'kuàng','物':'wù','空':'kōng','气':'qì',
+  '氧':'yǎng','碳':'tàn','氢':'qīng','氮':'dàn','铁':'tiě','铜':'tóng','铝':'lǚ','钢':'gāng',
+  // Animals
+  '鱼':'yú','鸟':'niǎo','虫':'chóng','猫':'māo','狗':'gǒu','马':'mǎ','牛':'niú','羊':'yáng',
+  '猪':'zhū','兔':'tù','龙':'lóng','蛇':'shé','鸡':'jī','鼠':'shǔ','虎':'hǔ','猴':'hóu',
+  '象':'xiàng','狮':'shī','狼':'láng','熊':'xióng','鹰':'yīng','鸭':'yā','鹅':'é','燕':'yàn',
+  '蝴':'hú','蝶':'dié','蜜':'mì','蜂':'fēng','蚂':'mǎ','蚁':'yǐ','蜘':'zhī','蛛':'zhū',
+  '螃':'páng','蟹':'xiè','虾':'xiā','蛙':'wā','龟':'guī','鳄':'è','鲸':'jīng','鲨':'shā',
+  // Body parts
+  '头':'tóu','脸':'liǎn','眼':'yǎn','耳':'ěr','鼻':'bí','口':'kǒu','牙':'yá','舌':'shé',
+  '脖':'bó','颈':'jǐng','肩':'jiān','胸':'xiōng','背':'bèi','腰':'yāo','肚':'dù','腹':'fù',
+  '手':'shǒu','臂':'bì','腿':'tuǐ','脚':'jiǎo','指':'zhǐ','趾':'zhǐ','骨':'gǔ','肉':'ròu',
+  '皮':'pí','肤':'fū','血':'xuè','心':'xīn','肝':'gān','胃':'wèi','肺':'fèi','肾':'shèn',
+  '脑':'nǎo','神':'shén','经':'jīng','筋':'jīn','发':'fà','须':'xū','眉':'méi','睫':'jié',
+  // Food & drink
+  '饭':'fàn','菜':'cài','肉':'ròu','鱼':'yú','蛋':'dàn','面':'miàn','包':'bāo','饼':'bǐng',
+  '糕':'gāo','粥':'zhōu','汤':'tāng','锅':'guō','盘':'pán','碗':'wǎn','筷':'kuài','勺':'sháo',
+  '水':'shuǐ','茶':'chá','酒':'jiǔ','咖':'kā','啡':'fēi','牛':'niú','奶':'nǎi','果':'guǒ',
+  '汁':'zhī','饮':'yǐn','料':'liào','糖':'táng','盐':'yán','酱':'jiàng','醋':'cù','油':'yóu',
+  '米':'mǐ','豆':'dòu','麦':'mài','玉':'yù','米':'mǐ','白':'bái','菜':'cài','土':'tǔ',
+  '豆':'dòu','洋':'yáng','葱':'cōng','姜':'jiāng','蒜':'suàn','辣':'là','椒':'jiāo',
+  '苹':'píng','果':'guǒ','香':'xiāng','蕉':'jiāo','橙':'chéng','柠':'níng','檬':'méng',
+  '葡':'pú','萄':'táo','草':'cǎo','莓':'méi','西':'xī','瓜':'guā','芒':'máng','果':'guǒ',
+  // Clothing & items
+  '衣':'yī','服':'fú','裤':'kù','裙':'qún','帽':'mào','鞋':'xié','袜':'wà','外':'wài','套':'tào',
+  '内':'nèi','衣':'yī','围':'wéi','巾':'jīn','手':'shǒu','套':'tào','领':'lǐng','带':'dài',
+  '钱':'qián','包':'bāo','皮':'pí','带':'dài','戒':'jiè','指':'zhǐ','项':'xiàng','链':'liàn',
+  '耳':'ěr','环':'huán','眼':'yǎn','镜':'jìng','手':'shǒu','表':'biǎo',
+  // Technology & modern life
+  '手':'shǒu','机':'jī','电':'diàn','脑':'nǎo','网':'wǎng','络':'luò','互':'hù','联':'lián',
+  '软':'ruǎn','件':'jiàn','硬':'yìng','件':'jiàn','数':'shù','据':'jù','信':'xìn','息':'xī',
+  '程':'chéng','序':'xù','应':'yìng','用':'yòng','系':'xì','统':'tǒng','平':'píng','台':'tái',
+  '游':'yóu','戏':'xì','视':'shì','频':'pín','音':'yīn','乐':'yuè','照':'zhào','片':'piàn',
+  '相':'xiàng','机':'jī','打':'dǎ','印':'yìn','机':'jī','扫':'sǎo','描':'miáo','仪':'yí',
+  '遥':'yáo','控':'kòng','器':'qì','充':'chōng','电':'diàn','器':'qì','耳':'ěr','机':'jī',
+  // Places & buildings
+  '学':'xué','校':'xiào','医':'yī','院':'yuàn','银':'yín','行':'háng','超':'chāo','市':'shì',
+  '商':'shāng','场':'chǎng','公':'gōng','园':'yuán','图':'tú','书':'shū','馆':'guǎn',
+  '博':'bó','物':'wù','馆':'guǎn','电':'diàn','影':'yǐng','院':'yuàn','剧':'jù','院':'yuàn',
+  '体':'tǐ','育':'yù','馆':'guǎn','游':'yóu','泳':'yǒng','池':'chí','机':'jī','场':'chǎng',
+  '车':'chē','站':'zhàn','港':'gǎng','口':'kǒu','码':'mǎ','头':'tou','市':'shì','政':'zhèng',
+  '厅':'tīng','大':'dà','使':'shǐ','馆':'guǎn','领':'lǐng','事':'shì','馆':'guǎn',
+  '房':'fáng','间':'jiān','客':'kè','厅':'tīng','卧':'wò','室':'shì','厨':'chú','房':'fáng',
+  '卫':'wèi','生':'shēng','间':'jiān','阳':'yáng','台':'tái','楼':'lóu','梯':'tī','电':'diàn',
+  '梯':'tī','走':'zǒu','廊':'láng','大':'dà','门':'mén','窗':'chuāng','户':'hù','地':'dì',
+  // Transportation
+  '车':'chē','汽':'qì','车':'chē','公':'gōng','共':'gòng','汽':'qì','车':'chē','出':'chū',
+  '租':'zū','车':'chē','地':'dì','铁':'tiě','火':'huǒ','车':'chē','高':'gāo','铁':'tiě',
+  '飞':'fēi','机':'jī','轮':'lún','船':'chuán','自':'zì','行':'xíng','车':'chē','摩':'mó',
+  '托':'tuō','车':'chē','卡':'kǎ','车':'chē','货':'huò','车':'chē','救':'jiù','护':'hù',
+  '车':'chē','消':'xiāo','防':'fáng','车':'chē','警':'jǐng','车':'chē',
+  '路':'lù','街':'jiē','道':'dào','桥':'qiáo','隧':'suì','道':'dào','立':'lì','交':'jiāo',
+  // Time
+  '时':'shí','间':'jiān','分':'fēn','秒':'miǎo','刻':'kè','点':'diǎn','钟':'zhōng',
+  '天':'tiān','周':'zhōu','月':'yuè','季':'jì','年':'nián','世':'shì','纪':'jì','代':'dài',
+  '春':'chūn','夏':'xià','秋':'qiū','冬':'dōng','今':'jīn','昨':'zuó','明':'míng',
+  '早':'zǎo','午':'wǔ','晚':'wǎn','夜':'yè','上':'shàng','午':'wǔ','下':'xià','午':'wǔ',
+  '凌':'líng','晨':'chén','黄':'huáng','昏':'hūn','黎':'lí','明':'míng',
+  '前':'qián','后':'hòu','曾':'céng','经':'jīng','未':'wèi','来':'lái','将':'jiāng','来':'lái',
+  '现':'xiàn','在':'zài','过':'guò','去':'qù','历':'lì','史':'shǐ','古':'gǔ','代':'dài',
+  '近':'jìn','代':'dài','现':'xiàn','代':'dài','当':'dāng','代':'dài',
+  // Education & language
+  '书':'shū','本':'běn','笔':'bǐ','纸':'zhǐ','本':'běn','子':'zi','字':'zì','词':'cí',
+  '句':'jù','文':'wén','章':'zhāng','段':'duàn','页':'yè','本':'běn','册':'cè','卷':'juǎn',
+  '汉':'hàn','语':'yǔ','中':'zhōng','文':'wén','英':'yīng','语':'yǔ','法':'fǎ','语':'yǔ',
+  '德':'dé','语':'yǔ','日':'rì','语':'yǔ','韩':'hán','语':'yǔ','西':'xī','班':'bān','牙':'yá',
+  '语':'yǔ','俄':'é','语':'yǔ','阿':'ā','拉':'lā','伯':'bó','语':'yǔ',
+  '拼':'pīn','音':'yīn','声':'shēng','调':'diào','声':'shēng','母':'mǔ','韵':'yùn','母':'mǔ',
+  '语':'yǔ','法':'fǎ','语':'yǔ','音':'yīn','语':'yǔ','义':'yì','词':'cí','汇':'huì',
+  '成':'chéng','语':'yǔ','谚':'yàn','语':'yǔ','俗':'sú','语':'yǔ','歇':'xiē','后':'hòu','语':'yǔ',
+  '翻':'fān','译':'yì','口':'kǒu','译':'yì','笔':'bǐ','译':'yì',
+  // Society & institutions
+  '国':'guó','家':'jiā','政':'zhèng','府':'fǔ','法':'fǎ','律':'lǜ','权':'quán','利':'lì',
+  '责':'zé','任':'rèn','义':'yì','务':'wù','自':'zì','由':'yóu','平':'píng','等':'děng',
+  '民':'mín','主':'zhǔ','社':'shè','会':'huì','经':'jīng','济':'jì','文':'wén','化':'huà',
+  '历':'lì','史':'shǐ','传':'chuán','统':'tǒng','习':'xí','俗':'sú','风':'fēng','俗':'sú',
+  '科':'kē','学':'xué','技':'jì','术':'shù','医':'yī','学':'xué','哲':'zhé','学':'xué',
+  '心':'xīn','理':'lǐ','学':'xué','社':'shè','会':'huì','学':'xué','政':'zhèng','治':'zhì',
+  '学':'xué','经':'jīng','济':'jì','学':'xué','法':'fǎ','学':'xué','语':'yǔ','言':'yán','学':'xué',
+  '军':'jūn','队':'duì','警':'jǐng','察':'chá','法':'fǎ','院':'yuàn','检':'jiǎn','察':'chá',
+  '院':'yuàn','监':'jiān','狱':'yù','律':'lǜ','师':'shī','法':'fǎ','官':'guān',
+  '公':'gōng','司':'sī','企':'qǐ','业':'yè','工':'gōng','厂':'chǎng','商':'shāng','店':'diàn',
+  '市':'shì','场':'chǎng','银':'yín','行':'háng','保':'bǎo','险':'xiǎn','税':'shuì','务':'wù',
+  '海':'hǎi','关':'guān','邮':'yóu','局':'jú','电':'diàn','信':'xìn','局':'jú',
+  // Abstract concepts
+  '思':'sī','想':'xiǎng','感':'gǎn','情':'qíng','意':'yì','志':'zhì','梦':'mèng','想':'xiǎng',
+  '理':'lǐ','想':'xiǎng','目':'mù','标':'biāo','计':'jì','划':'huà','策':'cè','略':'lüè',
+  '方':'fāng','案':'àn','方':'fāng','法':'fǎ','方':'fāng','式':'shì','途':'tú','径':'jìng',
+  '原':'yuán','则':'zé','规':'guī','律':'lǜ','标':'biāo','准':'zhǔn','规':'guī','则':'zé',
+  '条':'tiáo','件':'jiàn','环':'huán','境':'jìng','情':'qíng','况':'kuàng','状':'zhuàng','态':'tài',
+  '现':'xiàn','象':'xiàng','问':'wèn','题':'tí','矛':'máo','盾':'dùn','冲':'chōng','突':'tū',
+  '解':'jiě','决':'jué','方':'fāng','案':'àn','结':'jié','果':'guǒ','影':'yǐng','响':'xiǎng',
+  '关':'guān','系':'xì','联':'lián','系':'xì','区':'qū','别':'bié','差':'chā','异':'yì',
+  '相':'xiāng','同':'tóng','类':'lèi','似':'sì','对':'duì','比':'bǐ','分':'fēn','析':'xī',
+  '总':'zǒng','结':'jié','归':'guī','纳':'nà','演':'yǎn','绎':'yì','推':'tuī','断':'duàn',
+  '证':'zhèng','明':'míng','假':'jiǎ','设':'shè','实':'shí','验':'yàn','观':'guān','察':'chá',
+  '研':'yán','究':'jiū','调':'diào','查':'chá','统':'tǒng','计':'jì','分':'fēn','析':'xī',
+  // Measure words & classifiers
+  '个':'gè','只':'zhī','条':'tiáo','张':'zhāng','块':'kuài','件':'jiàn','双':'shuāng',
+  '对':'duì','把':'bǎ','本':'běn','册':'cè','份':'fèn','台':'tái','部':'bù','辆':'liàng',
+  '架':'jià','艘':'sōu','匹':'pǐ','头':'tóu','群':'qún','批':'pī','堆':'duī','捆':'kǔn',
+  '束':'shù','杯':'bēi','碗':'wǎn','盘':'pán','瓶':'píng','罐':'guàn','袋':'dài','包':'bāo',
+  '盒':'hé','箱':'xiāng','升':'shēng','斤':'jīn','克':'kè','吨':'dūn','米':'mǐ','厘':'lí',
+  '毫':'háo','公':'gōng','里':'lǐ','千':'qiān','米':'mǐ','平':'píng','方':'fāng',
+  // Common adjective complements & structures
+  '非':'fēi','常':'cháng','特':'tè','别':'bié','非':'fēi','常':'cháng','极':'jí','其':'qí',
+  '相':'xiāng','当':'dāng','比':'bǐ','较':'jiào','最':'zuì','更':'gèng','越':'yuè','来':'lái',
+  '越':'yuè','一':'yī','点':'diǎn','儿':'er','有':'yǒu','点':'diǎn','儿':'er','不':'bù',
+  '太':'tài','怎':'zěn','么':'me','多':'duō','么':'me','真':'zhēn','太':'tài',
+  // Common conjunctions & adverbs
+  '和':'hé','跟':'gēn','与':'yǔ','及':'jí','或':'huò','但':'dàn','而':'ér','然':'rán',
+  '虽':'suī','然':'rán','如':'rú','果':'guǒ','因':'yīn','为':'wèi','所':'suǒ','以':'yǐ',
+  '不':'bù','过':'guò','而':'ér','且':'qiě','不':'bù','但':'dàn','还':'hái','另':'lìng',
+  '外':'wài','此':'cǐ','外':'wài','否':'fǒu','则':'zé','否':'fǒu','则':'zé','要':'yào',
+  '么':'me','既':'jì','然':'rán','只':'zhǐ','要':'yào','只':'zhǐ','有':'yǒu',
+  '尽':'jǐn','管':'guǎn','即':'jí','使':'shǐ','哪':'nǎ','怕':'pà','宁':'nìng','可':'kě',
+  '与':'yǔ','其':'qí','不':'bù','如':'rú','何':'hé','况':'kuàng','况':'kuàng','且':'qiě',
+  '而':'ér','是':'shì','当':'dāng','然':'rán','事':'shì','实':'shí','上':'shàng',
+  '其':'qí','实':'shí','总':'zǒng','之':'zhī','此':'cǐ','外':'wài','另':'lìng','外':'wài',
+  // Common characters in chengyu & literary Chinese
+  '仁':'rén','义':'yì','礼':'lǐ','智':'zhì','信':'xìn','忠':'zhōng','孝':'xiào','廉':'lián',
+  '耻':'chǐ','勇':'yǒng','敬':'jìng','爱':'ài','和':'hé','谐':'xié','善':'shàn','美':'měi',
+  '真':'zhēn','诚':'chéng','俭':'jiǎn','朴':'pǔ','勤':'qín','奋':'fèn','进':'jìn','取':'qǔ',
+  '开':'kāi','拓':'tuò','创':'chuàng','新':'xīn','博':'bó','学':'xué','慎':'shèn','思':'sī',
+  '笃':'dǔ','行':'xíng','格':'gé','物':'wù','致':'zhì','知':'zhī','正':'zhèng','心':'xīn',
+  '修':'xiū','身':'shēn','齐':'qí','家':'jiā','治':'zhì','国':'guó','平':'píng','天':'tiān',
+  '下':'xià','止':'zhǐ','于':'yú','至':'zhì','善':'shàn','厚':'hòu','德':'dé','载':'zǎi',
+  '物':'wù','自':'zì','强':'qiáng','不':'bù','息':'xī','天':'tiān','行':'xíng','健':'jiàn',
+  // HSK 4 vocabulary
+  '必':'bì','须':'xū','必':'bì','要':'yào','必':'bì','需':'xū','尽':'jǐn','量':'liàng',
+  '尽':'jìn','快':'kuài','尽':'jǐn','管':'guǎn','尽':'jìn','力':'lì','竟':'jìng','然':'rán',
+  '居':'jū','然':'rán','果':'guǒ','然':'rán','当':'dāng','然':'rán','忽':'hū','然':'rán',
+  '突':'tū','然':'rán','偶':'ǒu','然':'rán','必':'bì','然':'rán','自':'zì','然':'rán',
+  '仍':'réng','然':'rán','依':'yī','然':'rán','依':'yī','旧':'jiù','照':'zhào','样':'yàng',
+  '何':'hé','况':'kuàng','再':'zài','说':'shuō','再':'zài','者':'zhě','另':'lìng','外':'wài',
+  '此':'cǐ','外':'wài','除':'chú','此':'cǐ','之':'zhī','外':'wài','总':'zǒng','而':'ér',
+  '言':'yán','之':'zhī','综':'zōng','上':'shàng','所':'suǒ','述':'shù','由':'yóu','此':'cǐ',
+  '可':'kě','见':'jiàn','因':'yīn','此':'cǐ','所':'suǒ','以':'yǐ','因':'yīn','而':'ér',
+  '从':'cóng','而':'ér','进':'jìn','而':'ér','况':'kuàng','且':'qiě','何':'hé','止':'zhǐ',
+  // HSK 5-6 vocabulary
+  '渊':'yuān','博':'bó','斟':'zhēn','酌':'zhuó','晦':'huì','涩':'sè','凛':'lǐn','然':'rán',
+  '瞬':'shùn','息':'xī','蹉':'cuō','跎':'tuó','叱':'chì','咤':'zhà','沧':'cāng','桑':'sāng',
+  '迂':'yū','腐':'fǔ','褒':'bāo','贬':'biǎn','踌':'chóu','躇':'chú','恣':'zì','意':'yì',
+  '弥':'mí','漫':'màn','豁':'huò','达':'dá','臆':'yì','断':'duàn','矫':'jiǎo','揉':'róu',
+  '造':'zào','作':'zuò','瞻':'zhān','顾':'gù','挽':'wǎn','狂':'kuáng','澜':'lán',
+  '纸':'zhǐ','兵':'bīng','蹴':'cù','而':'ér','就':'jiù','懈':'xiè','辟':'pì','鞭':'biān',
+  '浑':'hún','恰':'qià','濡':'rú','染':'rǎn','潜':'qián','移':'yí','默':'mò','举':'jǔ',
+  '循':'xún','序':'xù','渐':'jiàn','针':'zhēn','血':'xuè','洋':'yáng','洒':'sǎ','旁':'páng',
+  '征':'zhēng','引':'yǐn','躬':'gōng','瘁':'cuì','宵':'xiāo','旰':'gàn','废':'fèi',
+  '寝':'qǐn','兢':'jīng','业':'yè','处':'chǔ','惊':'jīng','临':'lín','危':'wēi','居':'jū',
+  '思':'sī','防':'fáng','患':'huàn','亡':'wáng','补':'bǔ','牢':'láo','曲':'qū','径':'jìng',
+  '幽':'yōu','峰':'fēng','回':'huí','柳':'liǔ','暗':'àn','时':'shí','过':'guò','境':'jìng',
+  '迁':'qiān','物':'wù','非':'fēi','盛':'shèng','极':'jí','衰':'shuāi','否':'pǐ','泰':'tài',
+  '隐':'yǐn','约':'yuē','闪':'shǎn','烁':'shuò','含':'hán','糊':'hu','简':'jiǎn','赅':'gāi',
+  '凿':'záo','振':'zhèn','聋':'lóng','发':'fā','聩':'kuì','砭':'biān','时':'shí','弊':'bì',
+  '振':'zhèn','词':'cí','纷':'fēn','纭':'yún','衷':'zhōng','求':'qiú','同':'tóng','存':'cún',
+  '异':'yì','殊':'shū','途':'tú','归':'guī','见':'jiàn','仁':'rén','见':'jiàn','智':'zhì',
+  '抒':'shū','己':'jǐ','畅':'chàng','欲':'yù','无':'wú','知':'zhī','言':'yán','推':'tuī',
+  '腹':'fù','置':'zhì','开':'kāi','诚':'chéng','布':'bù','坦':'tǎn','待':'dài',
+  '推':'tuī','己':'jǐ','设':'shè','身':'shēn','处':'chǔ','感':'gǎn','同':'tóng','受':'shòu',
+  '力':'lì','所':'suǒ','量':'liàng','行':'xíng','恰':'qià','止':'zhǐ','适':'shì','可':'kě',
+
+  // ── Additional common characters ─────────────────────────
+  '乡':'xiāng',
+  '介':'jiè',
+  '们':'men',
+  '价':'jià',
+  '伤':'shāng',
+  '位':'wèi',
+  '住':'zhù',
+  '值':'zhí',
+  '偿':'cháng',
+  '元':'yuán',
+  '先':'xiān',
+  '具':'jù',
+  '刚':'gāng',
+  '功':'gōng',
+  '助':'zhù',
+  '励':'lì',
+  '县':'xiàn',
+  '叶':'yè',
+  '号':'hào',
+  '名':'míng',
+  '告':'gào',
+  '啤':'pí',
+  '坊':'fāng',
+  '塔':'tǎ',
+  '塞':'sāi',
+  '墨':'mò',
+  '失':'shī',
+  '奖':'jiǎng',
+  '守':'shǒu',
+  '审':'shěn',
+  '宾':'bīn',
+  '尊':'zūn',
+  '尤':'yóu',
+  '岁':'suì',
+  '巷':'xiàng',
+  '帆':'fān',
+  '度':'dù',
+  '弄':'lòng',
+  '往':'wǎng',
+  '很':'hěn',
+  '性':'xìng',
+  '恩':'ēn',
+  '惩':'chéng',
+  '才':'cái',
+  '扬':'yáng',
+  '承':'chéng',
+  '报':'bào',
+  '损':'sǔn',
+  '措':'cuò',
+  '援':'yuán',
+  '搬':'bān',
+  '收':'shōu',
+  '效':'xiào',
+  '散':'sàn',
+  '整':'zhěng',
+  '施':'shī',
+  '杂':'zá',
+  '村':'cūn',
+  '档':'dàng',
+  '桨':'jiǎng',
+  '棋':'qí',
+  '椅':'yǐ',
+  '欺':'qī',
+  '歌':'gē',
+  '歧':'qí',
+  '注':'zhù',
+  '漂':'piào',
+  '激':'jī',
+  '熟':'shú',
+  '琴':'qín',
+  '留':'liú',
+  '疼':'téng',
+  '益':'yì',
+  '省':'shěng',
+  '督':'dū',
+  '瞒':'mán',
+  '砚':'yàn',
+  '确':'què',
+  '票':'piào',
+  '篇':'piān',
+  '篮':'lán',
+  '练':'liàn',
+  '绍':'shào',
+  '罚':'fá',
+  '胡':'hú',
+  '舞':'wǔ',
+  '航':'háng',
+  '舱':'cāng',
+  '节':'jié',
+  '营':'yíng',
+  '讨':'tǎo',
+  '讲':'jiǎng',
+  '论':'lùn',
+  '评':'píng',
+  '诗':'shī',
+  '请':'qǐng',
+  '诺':'nuò',
+  '课':'kè',
+  '谎':'huǎng',
+  '谢':'xiè',
+  '谣':'yáo',
+  '谴':'qiǎn',
+  '败':'bài',
+  '质':'zhì',
+  '赋':'fù',
+  '赔':'péi',
+  '赞':'zàn',
+  '迟':'chí',
+  '退':'tuì',
+  '速':'sù',
+  '都':'dōu',
+  '镇':'zhèn',
+  '降':'jiàng',
+  '随':'suí',
+  '顺':'shùn',
+  '骑':'qí',
+  '骗':'piàn',
+  '过':'guò','犹':'yóu','不':'bù','及':'jí',
+};
+
+const MEANINGS = {
+  '你':'you','我':'I, me','他':'he, him','她':'she, her','好':'good, well',
+  '是':'to be','有':'to have','不':'not, no','人':'person, people',
+  '大':'big, large','小':'small, little','中':'middle, center',
+  '国':'country, nation','水':'water','火':'fire','山':'mountain',
+  '日':'sun, day','月':'moon, month','木':'wood, tree','土':'earth, soil',
+  '金':'gold, metal','学':'to learn, study','语':'language, speech',
+  '汉':'Han Chinese','字':'character, word','书':'book',
+  '爱':'love','心':'heart, mind','手':'hand','口':'mouth','门':'door, gate',
+  '马':'horse','牛':'ox, cow','羊':'goat, sheep','鱼':'fish','鸟':'bird',
+  '龙':'dragon','虎':'tiger','猫':'cat','狗':'dog','天':'sky, heaven, day',
+  '地':'earth, ground','风':'wind','云':'cloud','雨':'rain','雪':'snow',
+  '花':'flower','草':'grass','树':'tree','来':'to come','去':'to go',
+  '吃':'to eat','喝':'to drink','看':'to look, watch','听':'to listen',
+  '说':'to speak, say','写':'to write','读':'to read','走':'to walk, go',
+  '一':'one','二':'two','三':'three','四':'four','五':'five','六':'six',
+  '七':'seven','八':'eight','九':'nine','十':'ten','年':'year',
+  '家':'home, family','老':'old','新':'new','多':'many, much',
+  '少':'few, little','高':'tall, high','快':'fast, quick','慢':'slow',
+  '热':'hot','冷':'cold','美':'beautiful','明':'bright, clear',
+  '白':'white, clear','黑':'black','红':'red','绿':'green',
+  '蓝':'blue','黄':'yellow','紫':'purple','灰':'grey',
+  '父':'father','母':'mother','爸':'dad','妈':'mum','哥':'elder brother',
+  '弟':'younger brother','姐':'elder sister','妹':'younger sister',
+  '朋':'friend','友':'friend','路':'road, path','车':'car, vehicle',
+  '钱':'money','时':'time','间':'space, between','日':'day','月':'month',
+};
+
+function lookupChar(char) {
+  // Instant lookup from built-in table
+  const py  = PINYIN[char]  || '';
+  const def = MEANINGS[char] || '';
+  if (py) return Promise.resolve({ pinyin: py, meaning: def });
+
+  // Not in built-in table — fetch from API
+  return fetch(`https://helloacm.com/api/pinyin/?cached&s=${encodeURIComponent(char)}&t=1`)
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.result && data.result[0]) {
+        const raw = data.result[0];
+        const pinyin = toMark(raw.replace(/[\s]+/g, ''));
+        const result = { pinyin, meaning: def };
+        PINYIN[char] = pinyin; // cache it
+        return result;
+      }
+      throw new Error('no result');
+    })
+    .catch(() => {
+      // Final fallback — mandarincantonese API
+      return fetch(`https://api.prod.mandarincantonese.com/pinyin/${encodeURIComponent(char)}`)
+        .then(r => r.json())
+        .then(d => {
+          const pinyin = d && d.pinyin ? d.pinyin.trim() : '';
+          PINYIN[char] = pinyin;
+          return { pinyin, meaning: def };
+        })
+        .catch(() => ({ pinyin: '', meaning: def }));
+    });
+}
+
+// ── State ─────────────────────────────────────────────────────
+let writer        = null;
+let charData      = null;
+let totalStrokes  = 0;
+let currentStroke = 0;
+let isLooping     = false;
+let isAnimating   = false;
+let currentTab    = 'animate';
+let animSpeed     = 1;
+
+document.getElementById('charInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') loadChar();
+});
+
+// ── Load character ────────────────────────────────────────────
+function loadChar() {
+  const raw = document.getElementById('charInput').value.trim();
+  if (!raw) return;
+  const char = [...raw][0];
+  document.getElementById('charInput').value = char;
+
+  // Reset UI
+  document.getElementById('displayArea').style.display = 'none';
+  document.getElementById('errorMsg').style.display   = 'none';
+  document.getElementById('loadingMsg').style.display = 'block';
+  document.getElementById('hanzi-target').innerHTML   = '';
+
+  // Destroy old writer safely
+  writer = null; charData = null;
+  isLooping = false; isAnimating = false; currentStroke = 0;
+
+  // Fetch character JSON directly — confirms existence before creating writer
+  fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@latest/${encodeURIComponent(char)}.json`)
+    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+    .then(data => {
+      charData = data;
+      document.getElementById('loadingMsg').style.display = 'none';
+      buildWriter(char, data); // async — doesn't need await here
+    })
+    .catch(() => {
+      document.getElementById('loadingMsg').style.display = 'none';
+      const err = document.getElementById('errorMsg');
+      err.innerHTML = `<strong>"${char}" not found.</strong> HanziWriter covers 9,000+ characters — try a different one.`;
+      err.style.display = 'block';
+    });
+}
+
+// ── Build writer from pre-fetched data ────────────────────────
+function buildWriter(char, data) {
+  totalStrokes = data.strokes.length;
+
+  writer = HanziWriter.create('hanzi-target', char, {
+    width: 280,
+    height: 280,
+    padding: 24,
+    showOutline: true,
+    strokeColor: '#1c1c1c',
+    outlineColor: '#ecddd5',
+    drawingColor: '#f37a48',
+    drawingWidth: 4,
+    strokeAnimationSpeed: 1,
+    delayBetweenStrokes: 200,
+    charDataLoader: (_char, onLoad, _onError) => { onLoad(data); },
+  });
+
+  // Populate UI
+  document.getElementById('strokeCount').textContent = totalStrokes;
+  document.getElementById('infoBig').textContent = char;
+  document.getElementById('infoMeaning').textContent = '';
+  document.getElementById('infoTags').innerHTML =
+    `<div class="char-tag">${totalStrokes} stroke${totalStrokes===1?'':'s'}</div>`;
+
+  buildDots('animDots', totalStrokes);
+  buildBreakdown(data);
+
+  document.getElementById('displayArea').style.display = 'block';
+  document.getElementById('displayArea').scrollIntoView({ behavior:'smooth', block:'start' });
+
+  // Reset tab
+  currentTab = 'animate';
+  ['animate','quiz'].forEach(t => {
+    document.getElementById(`tab${t[0].toUpperCase()+t.slice(1)}`).classList.toggle('active', t==='animate');
+    document.getElementById(`${t}Controls`).style.display = t==='animate' ? 'block' : 'none';
+  });
+  updateDots('animDots', 0, -1);
+  document.getElementById('btnAnimate').disabled = false;
+  document.getElementById('btnLoop').textContent = '⟳ Loop: Off';
+  writer.showCharacter({ duration: 0 });
+
+  // Look up pinyin + meaning (instant if in built-in table, API fallback otherwise)
+  document.getElementById('infoPinyin').textContent  = PINYIN[char] || '';
+  document.getElementById('infoMeaning').textContent = MEANINGS[char] || '';
+  if (!PINYIN[char]) {
+    document.getElementById('infoPinyin').textContent = '…';
+    lookupChar(char).then(dict => {
+      document.getElementById('infoPinyin').textContent  = dict.pinyin  || '';
+      document.getElementById('infoMeaning').textContent = dict.meaning || '';
+    });
+  }
+}
+
+// ── Dots ──────────────────────────────────────────────────────
+function buildDots(id, total) {
+  const el = document.getElementById(id);
+  el.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'stroke-dot';
+    d.id = `${id}-${i}`;
+    el.appendChild(d);
+  }
+}
+function updateDots(id, upTo, cur) {
+  for (let i = 0; i < totalStrokes; i++) {
+    const d = document.getElementById(`${id}-${i}`);
+    if (!d) continue;
+    d.className = 'stroke-dot' + (i < upTo ? ' done' : '') + (i === cur ? ' current' : '');
+  }
+}
+
+// ── Tab switcher ──────────────────────────────────────────────
+function switchTab(tab) {
+  if (!writer) return;
+  currentTab = tab;
+  ['animate','quiz'].forEach(t => {
+    const el = document.getElementById(`tab${t[0].toUpperCase()+t.slice(1)}`);
+    if (el) el.classList.toggle('active', t===tab);
+    const ctrl = document.getElementById(`${t}Controls`);
+    if (ctrl) ctrl.style.display = t===tab ? 'block' : 'none';
+  });
+
+  isLooping   = false;
+  isAnimating = false;
+  document.getElementById('btnLoop').textContent   = '⟳ Loop: Off';
+  document.getElementById('btnAnimate').disabled   = false;
+  document.getElementById('quizResult').style.display = 'none';
+
+  const bc = document.querySelector('.breakdown-card');
+  if (bc) bc.style.display = tab === 'quiz' ? 'none' : 'block';
+
+  if (tab === 'animate') {
+    writer.hideCharacter({ duration:0 });
+    writer.showCharacter({ duration:0 });
+    updateDots('animDots', 0, -1);
+  } else {
+    writer.hideCharacter({ duration:0 });
+  }
+}
+
+// ── Animate tab ───────────────────────────────────────────────
+function doAnimate() {
+  if (!writer || isAnimating) return;
+  writer.hideCharacter({ duration:0 });
+  isAnimating = true;
+  document.getElementById('btnAnimate').disabled = true;
+  updateDots('animDots', 0, -1);
+  runStroke(0);
+}
+
+function runStroke(idx) {
+  if (idx >= totalStrokes) {
+    isAnimating = false;
+    document.getElementById('btnAnimate').disabled = false;
+    updateDots('animDots', totalStrokes, -1);
+    if (isLooping) {
+      setTimeout(() => {
+        if (!isLooping) return;
+        writer.hideCharacter({ duration:0 });
+        updateDots('animDots', 0, -1);
+        setTimeout(() => { isAnimating = true; document.getElementById('btnAnimate').disabled = true; runStroke(0); }, 600);
+      }, 1000);
+    }
+    return;
+  }
+  updateDots('animDots', idx, idx);
+  writer.animateStroke(idx, {
+    strokeAnimationSpeed: animSpeed,
+    onComplete: () => {
+      updateDots('animDots', idx+1, -1);
+      setTimeout(() => runStroke(idx+1), Math.max(50, Math.round(200/animSpeed)));
+    }
+  });
+}
+
+function doReset() {
+  if (!writer) return;
+  isLooping   = false;
+  isAnimating = false;
+  document.getElementById('btnLoop').textContent    = '⟳ Loop: Off';
+  document.getElementById('btnAnimate').disabled    = false;
+  document.getElementById('quizResult').style.display = 'none';
+  writer.hideCharacter({ duration:0 });
+  if (currentTab === 'animate') {
+    writer.showCharacter({ duration:0 });
+    updateDots('animDots', 0, -1);
+  }
+}
+
+function doLoopToggle() {
+  isLooping = !isLooping;
+  document.getElementById('btnLoop').textContent = `⟳ Loop: ${isLooping?'On':'Off'}`;
+  if (isLooping && !isAnimating) doAnimate();
+}
+
+function updateSpeed() {
+  animSpeed = parseFloat(document.getElementById('speedSlider').value);
+  document.getElementById('speedVal').textContent = animSpeed.toFixed(1).replace(/\.0$/,'')+'×';
+}
+
+// ── Quiz tab ──────────────────────────────────────────────────
+function startQuiz() {
+  if (!writer) return;
+  document.getElementById('quizResult').style.display = 'none';
+  writer.quiz({
+    onMistake: d => {
+      const r = document.getElementById('quizResult');
+      r.className = 'quiz-result err';
+      r.textContent = `Incorrect — try stroke ${d.strokeNum+1} again`;
+      r.style.display = 'block';
+    },
+    onCorrectStroke: d => {
+      const r = document.getElementById('quizResult');
+      r.className = 'quiz-result ok';
+      r.textContent = `✓ Stroke ${d.strokeNum+1} correct! ${d.strokeNum+1<totalStrokes ? (totalStrokes-d.strokeNum-1)+' to go.' : ''}`;
+      r.style.display = 'block';
+    },
+    onComplete: s => {
+      const r = document.getElementById('quizResult');
+      r.className = 'quiz-result ok';
+      r.textContent = `🎉 完成！ ${s.totalMistakes===0?'Perfect — no mistakes!':'Completed with '+s.totalMistakes+' mistake'+(s.totalMistakes===1?'':'s')+'.'}`; 
+      r.style.display = 'block';
+    }
+  });
+}
+
+// ── Stroke breakdown grid ─────────────────────────────────────
+function buildBreakdown(data) {
+  const grid = document.getElementById('breakdownGrid');
+  grid.innerHTML = '';
+  data.strokes.forEach((stroke, idx) => {
+    const item = document.createElement('div');
+    item.className = 'breakdown-item';
+
+    const num = document.createElement('div');
+    num.className = 'breakdown-num';
+    num.textContent = idx+1;
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 1024 1024');
+    svg.setAttribute('class','breakdown-svg');
+
+    data.strokes.forEach((s, i) => {
+      if (i > idx) return;
+      const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('d', s);
+      path.setAttribute('fill', i===idx ? '#f37a48' : '#ddd');
+      path.setAttribute('transform','scale(1,-1) translate(0,-900)');
+      svg.appendChild(path);
+    });
+
+    item.appendChild(num);
+    item.appendChild(svg);
+    grid.appendChild(item);
+  });
+}
+</script>
+</body>
+</html>
