@@ -3,194 +3,260 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stroke Order — Mandarin Zest</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Chinese Stroke Order · Mandarin Zest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --orange:#f37a48;--orange-dark:#d95f2c;--orange-light:#f8dacd;
-    --green:#228b22;--green-dark:#1a6b1a;--green-light:#e0f4e0;
-    --white:#ffffff;--ink:#1c1c1c;--ink-mid:#555555;--ink-light:#999999;
-    --surface:#fdfcfa;--border:#ecddd5;
+  /* Mandarin Zest stroke order tool. Optional: ?char=爱 opens on that character.
+     Recommended embed height: 1650px (phones scroll inside the frame). */
+  :root {
+    --orange:#f37a48; --orange-d:#e2632f; --peach:#fdf1ea; --peach2:#f8dacd;
+    --green:#1b6f1b; --green-d:#173f17; --mint:#e0f4e0;
+    --ink:#2a2420; --muted:#5c4f47; --cream:#fffaf6; --line:#ecdcd2;
   }
-  body{font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center}
-  .topbar{width:100%;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:16px 2rem}
-  .logo-text{font-size:20px;font-weight:600;color:var(--ink);letter-spacing:-0.01em}
-  .logo-text span{color:var(--orange)}
-  .app{width:100%;max-width:640px;padding:2rem 1.25rem 4rem}
+  * { box-sizing:border-box; }
+  html, body { margin:0; }
+  body { background:var(--cream); color:var(--ink); font-family:'Outfit','Noto Sans SC',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  .zh { font-family:'Noto Sans SC','Outfit',sans-serif; }
+  a { color:inherit; }
+  button { font-family:inherit; }
+  button:focus-visible, input:focus-visible, a:focus-visible { outline:3px solid #4f7a94; outline-offset:2px; }
+  .app { max-width:980px; margin:0 auto; padding:22px 18px 28px; display:flex; flex-direction:column; gap:18px; }
 
-  .hero{text-align:center;margin-bottom:2rem}
-  .hero-chars{font-family:'Noto Serif SC',serif;font-size:42px;font-weight:700;letter-spacing:0.1em;margin-bottom:1rem;line-height:1}
-  .hero-chars .c1{color:var(--orange)}
-  .hero-chars .c2{color:var(--green)}
-  .hero-chars .c3{color:var(--orange-light);-webkit-text-stroke:1.5px var(--orange)}
-  .hero-chars .c4{color:var(--green-light);-webkit-text-stroke:1.5px var(--green)}
-  .hero h1{font-size:22px;font-weight:600;letter-spacing:-0.02em;margin-bottom:5px}
-  .hero p{font-size:14px;color:var(--ink-mid)}
+  /* hero */
+  .hero { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:end; gap:10px; background:var(--peach); border-radius:28px; padding:26px 28px 0; overflow:hidden; position:relative; }
+  .hero-txt { padding-bottom:24px; }
+  .eyebrow { font-size:12.5px; font-weight:800; letter-spacing:.12em; color:#a8431a; text-transform:uppercase; }
+  .hero h1 { margin:6px 0 6px; font-size:clamp(28px,4.4vw,42px); line-height:1.05; font-weight:800; letter-spacing:-.01em; }
+  .hero h1 em { font-style:normal; color:var(--orange-d); }
+  .hero p { margin:0 0 16px; color:var(--muted); font-size:16px; line-height:1.45; max-width:460px; }
+  .search { display:flex; gap:8px; background:#fff; border:1.5px solid var(--line); border-radius:999px; padding:6px; max-width:440px; }
+  .search input { flex:1; min-width:0; border:0; background:transparent; font-size:22px; padding:6px 14px; font-family:'Noto Sans SC',sans-serif; color:var(--ink); }
+  .search input:focus { outline:none; }
+  .search:focus-within { border-color:var(--orange); }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; border:0; border-radius:999px; background:var(--orange); color:var(--ink); font-weight:800; font-size:15.5px; padding:11px 20px; cursor:pointer; text-decoration:none; white-space:nowrap; transition:background .15s, transform .15s; }
+  .btn:hover { background:var(--orange-d); }
+  .btn:active { transform:scale(.97); }
+  .btn.ghost { background:#fff; box-shadow:inset 0 0 0 1.5px var(--line); }
+  .btn.ghost:hover { background:var(--peach); }
+  .btn.ghost.on { background:var(--mint); box-shadow:inset 0 0 0 1.5px #b9dfb9; color:var(--green); }
+  .btn:disabled { opacity:.5; cursor:default; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; align-items:center; }
+  .chips span { font-size:13px; color:var(--muted); margin-right:2px; }
+  .chip { border:1.5px solid var(--peach2); background:#fff; border-radius:12px; font-size:18px; width:40px; height:40px; cursor:pointer; font-family:'Noto Sans SC',sans-serif; color:var(--ink); transition:transform .15s, border-color .15s; }
+  .chip:hover { transform:translateY(-2px); border-color:var(--orange); }
+  .chip.on { background:var(--orange); border-color:var(--orange); }
+  .mascot { position:relative; width:190px; align-self:end; }
+  .mascot img { display:block; width:100%; height:auto; margin-bottom:-56px; }
+  .bubble { position:absolute; top:6px; right:150px; background:#fff; border-radius:16px; padding:8px 12px; font-size:14px; font-weight:700; box-shadow:0 6px 16px rgba(42,36,32,.08); white-space:nowrap; animation:bob 3s ease-in-out infinite; }
+  .bubble::after { content:""; position:absolute; right:-6px; top:16px; border:7px solid transparent; border-left-color:#fff; border-right:0; }
+  @keyframes bob { 50% { transform:translateY(-4px); } }
 
-  .search-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:1.5rem;margin-bottom:1.25rem;position:relative;overflow:hidden}
-  .search-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--green))}
-  .search-label{font-size:13px;font-weight:500;color:var(--ink-mid);margin-bottom:10px}
-  .search-row{display:flex;gap:10px}
-  .char-input{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:12px 16px;font-family:'Noto Serif SC',serif;font-size:28px;color:var(--ink);outline:none;text-align:center;letter-spacing:0.1em;transition:border-color 0.15s;min-width:0}
-  .char-input:focus{border-color:var(--orange)}
-  .char-input::placeholder{font-family:'Outfit',sans-serif;font-size:14px;letter-spacing:0}
-  .search-btn{background:var(--orange);color:white;border:none;border-radius:12px;padding:12px 20px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background 0.15s}
-  .search-btn:hover{background:var(--orange-dark)}
+  /* messages */
+  .msg { display:none; text-align:center; background:#fff; border:1px solid var(--line); border-radius:20px; padding:18px; color:var(--muted); font-size:15px; }
+  .msg.err { color:#8a2f12; background:#fff3ee; border-color:var(--peach2); }
+  .spinner { width:22px; height:22px; border:3px solid var(--peach2); border-top-color:var(--orange); border-radius:50%; display:inline-block; vertical-align:middle; margin-right:8px; animation:spin .8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
 
-  .loading-msg{text-align:center;padding:1.5rem;color:var(--ink-mid);font-size:14px;display:none}
-  .spinner{width:32px;height:32px;border:3px solid var(--orange-light);border-top-color:var(--orange);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 10px}
-  @keyframes spin{to{transform:rotate(360deg)}}
+  /* main tool */
+  .tool { display:none; grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr); gap:18px; }
+  .tool.on { display:grid; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:24px; padding:20px; }
+  .tabs { display:flex; background:var(--peach); border-radius:999px; padding:4px; gap:4px; margin-bottom:14px; }
+  .tab { flex:1; border:0; background:transparent; border-radius:999px; padding:10px; font-weight:800; font-size:15px; cursor:pointer; color:var(--muted); }
+  .tab.on { background:#fff; color:var(--ink); box-shadow:0 2px 8px rgba(42,36,32,.08); }
+  .stage { position:relative; width:100%; max-width:320px; aspect-ratio:1; margin:0 auto; background:var(--cream); border-radius:18px; border:1.5px solid var(--peach2); }
+  .stage svg.grid { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  #hanzi-target { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+  #hanzi-target svg { width:100%; height:100%; }
+  .count { position:absolute; right:10px; bottom:8px; font-size:12.5px; font-weight:700; color:var(--muted); background:#fff; border-radius:999px; padding:3px 9px; border:1px solid var(--line); }
+  .controls { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:16px; }
+  .speed { display:flex; align-items:center; gap:10px; justify-content:center; margin-top:14px; font-size:14px; font-weight:700; color:var(--muted); }
+  .speed input { width:170px; accent-color:var(--orange); }
+  .speed b { min-width:34px; color:var(--ink); }
+  .dots { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-top:14px; }
+  .dot { width:9px; height:9px; border-radius:50%; background:var(--peach2); transition:all .2s; }
+  .dot.done { background:var(--green); }
+  .dot.current { background:var(--orange); transform:scale(1.4); }
+  .hint { text-align:center; color:var(--muted); font-size:14.5px; margin:0 0 4px; }
+  .result { display:none; text-align:center; margin-top:12px; border-radius:14px; padding:10px 12px; font-weight:700; font-size:15px; }
+  .result.ok { display:block; background:var(--mint); color:var(--green); }
+  .result.bad { display:block; background:#fff3ee; color:#a8431a; }
 
-  .error-msg{background:#fdecea;border:1px solid #e05a4a;border-radius:16px;padding:1.25rem;color:#c0392b;font-size:14px;text-align:center;display:none;margin-bottom:1rem}
+  .side { display:flex; flex-direction:column; gap:18px; }
+  .info { display:flex; gap:16px; align-items:center; }
+  .big { font-family:'Noto Sans SC',sans-serif; font-size:76px; line-height:1; width:104px; height:104px; flex:none; display:flex; align-items:center; justify-content:center; background:var(--peach); border-radius:20px; }
+  .pinyin { font-size:26px; font-weight:800; color:var(--orange-d); }
+  .meaning { color:var(--muted); font-size:15.5px; margin-top:2px; line-height:1.35; }
+  .tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .tag { font-size:12.5px; font-weight:700; padding:4px 10px; border-radius:999px; background:var(--mint); color:var(--green); }
+  .tag.o { background:var(--peach); color:#a8431a; }
+  .speak { border:0; background:var(--peach); border-radius:50%; width:34px; height:34px; cursor:pointer; font-size:16px; vertical-align:middle; margin-left:6px; }
+  .speak:hover { background:var(--peach2); }
+  h2 { margin:0 0 12px; font-size:17px; font-weight:800; }
+  .strokes { display:grid; grid-template-columns:repeat(auto-fill,minmax(62px,1fr)); gap:8px; }
+  .st { position:relative; aspect-ratio:1; background:var(--cream); border:1px solid var(--line); border-radius:12px; cursor:pointer; padding:0; transition:border-color .15s, transform .15s; }
+  .st:hover { border-color:var(--orange); transform:translateY(-2px); }
+  .st svg { width:100%; height:100%; display:block; }
+  .st i { position:absolute; top:3px; left:6px; font-style:normal; font-size:11px; font-weight:800; color:var(--muted); }
+  .tip { margin:12px 0 0; font-size:13.5px; color:var(--muted); line-height:1.45; }
 
-  .display-area{display:none}
+  /* bottom: book + email */
+  .bottom { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:18px; }
+  .book { display:grid; grid-template-columns:130px 1fr; gap:20px; align-items:center; background:var(--green-d); color:#fff; border-radius:26px; padding:22px; position:relative; overflow:hidden; }
+  .book::before { content:"字"; position:absolute; right:-14px; bottom:-48px; font-family:'Noto Sans SC',sans-serif; font-size:190px; font-weight:700; color:rgba(255,255,255,.05); pointer-events:none; }
+  .book img { width:100%; border-radius:6px; box-shadow:0 14px 30px rgba(0,0,0,.35); transform:rotate(-3deg); transition:transform .3s; }
+  .book:hover img { transform:rotate(0) scale(1.03); }
+  .book .eyebrow { color:#ffb48f; }
+  .book h3 { margin:6px 0 6px; font-size:22px; line-height:1.15; font-weight:800; }
+  .book p { margin:0 0 12px; color:#d9e8d9; font-size:14.5px; line-height:1.45; }
+  .price { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin-bottom:12px; font-size:14px; color:#d9e8d9; }
+  .price b { font-size:24px; color:#fff; }
+  .price s { opacity:.7; }
+  .code { background:rgba(255,255,255,.12); border:1px dashed rgba(255,255,255,.4); border-radius:8px; padding:2px 8px; font-weight:800; color:#fff; letter-spacing:.04em; }
+  .mail { background:var(--peach); border-radius:26px; padding:22px; display:flex; flex-direction:column; gap:10px; }
+  .mail h3 { margin:0; font-size:20px; font-weight:800; line-height:1.2; }
+  .mail p { margin:0; font-size:14.5px; color:var(--muted); line-height:1.45; }
+  .mailrow { display:flex; gap:8px; }
+  .mailrow input { flex:1; min-width:0; font-family:inherit; font-size:15px; padding:11px 14px; border:1.5px solid var(--peach2); border-radius:999px; background:#fff; }
+  .mailrow input:focus { outline:none; border-color:var(--orange); }
+  .consent { display:flex; gap:8px; align-items:flex-start; font-size:12.5px; line-height:1.4; color:#4a3c34; cursor:pointer; }
+  .consent input { width:17px; height:17px; margin:1px 0 0; flex:none; accent-color:var(--orange); }
+  .mailmsg { font-size:13.5px; min-height:18px; color:#a8431a; font-weight:600; }
+  .mailmsg.ok { color:var(--green); }
+  .credit { text-align:center; font-size:12.5px; color:var(--muted); }
+  .credit a { color:var(--muted); }
 
-  .char-info-bar{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1rem;display:flex;align-items:center;gap:1.25rem}
-  .char-big{font-family:'Noto Serif SC',serif;font-size:56px;font-weight:700;color:var(--ink);line-height:1;flex-shrink:0}
-  .char-details{flex:1;min-width:0}
-  .char-pinyin{font-size:20px;color:var(--orange);font-weight:400;letter-spacing:0.06em;margin-bottom:3px}
-  .char-meaning{font-size:14px;color:var(--ink-mid);line-height:1.5;margin-bottom:6px}
-  .char-tags{display:flex;gap:7px;flex-wrap:wrap}
-  .char-tag{background:var(--orange-light);color:var(--orange-dark);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:500}
+  .fade { animation:fade .35s ease both; }
+  @keyframes fade { from { opacity:0; transform:translateY(6px); } }
 
-  .writer-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:1.5rem;margin-bottom:1rem;position:relative;overflow:hidden}
-  .writer-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--green))}
-  .writer-card-title{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-light);margin-bottom:1rem}
-
-  .tab-row{display:flex;gap:0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:3px;margin-bottom:1.25rem}
-  .tab-btn{flex:1;padding:8px 10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;color:var(--ink-mid);background:transparent;border:none;border-radius:9px;cursor:pointer;transition:all 0.15s}
-  .tab-btn.active{background:var(--white);color:var(--orange);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
-
-  .canvas-wrap{display:flex;justify-content:center;margin-bottom:1.25rem;position:relative}
-  #hanzi-target{background:var(--surface);border-radius:12px}
-  .stroke-counter{position:absolute;top:8px;right:8px;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:500;color:var(--ink-mid)}
-  .stroke-counter span{color:var(--orange);font-weight:700}
-
-  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:1rem}
-  .ctrl-btn{display:flex;align-items:center;gap:6px;background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:9px 16px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;color:var(--ink);cursor:pointer;transition:all 0.12s}
-  .ctrl-btn:hover{border-color:var(--orange);color:var(--orange)}
-  .ctrl-btn.primary{background:var(--orange);border-color:var(--orange);color:white}
-  .ctrl-btn.primary:hover{background:var(--orange-dark);border-color:var(--orange-dark);color:white}
-  .ctrl-btn.green-btn{background:var(--green);border-color:var(--green);color:white}
-  .ctrl-btn.green-btn:hover{background:var(--green-dark);border-color:var(--green-dark)}
-  .ctrl-btn:disabled{opacity:0.35;cursor:default;pointer-events:none}
-
-  .speed-row{display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:10px;padding:10px 14px}
-  .speed-label{font-size:12px;color:var(--ink-light);white-space:nowrap;font-weight:500}
-  .speed-row input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:10px;background:var(--orange-light);outline:none;cursor:pointer}
-  .speed-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--orange);border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.15)}
-  .speed-val{font-size:12px;font-weight:600;color:var(--orange);min-width:28px;text-align:right}
-
-  .stroke-dots{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:0.75rem}
-  .stroke-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background 0.2s}
-  .stroke-dot.done{background:var(--orange)}
-  .stroke-dot.current{background:var(--green);transform:scale(1.3)}
-
-  .quiz-hint{text-align:center;font-size:13px;color:var(--ink-mid);margin-bottom:0.75rem}
-  .quiz-result{text-align:center;padding:12px;border-radius:12px;font-size:14px;font-weight:500;margin-top:0.75rem;display:none}
-  .quiz-result.ok{background:var(--green-light);color:var(--green)}
-  .quiz-result.err{background:#fdecea;color:#c0392b}
-
-  .breakdown-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.25rem;margin-bottom:1rem}
-  .breakdown-title{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-light);margin-bottom:0.75rem}
-  .breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:8px}
-  .breakdown-item{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:6px;text-align:center;}
-  .breakdown-num{font-size:10px;color:var(--ink-light);margin-bottom:2px}
-  .breakdown-svg{width:38px;height:38px}
-
-  .credit{text-align:center;font-size:11px;color:var(--ink-light);margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)}
-  .credit a{color:var(--orange);text-decoration:none}
-  .credit a:hover{text-decoration:underline}
-
-  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-  .fade-in{animation:fadeIn 0.3s ease forwards}
+  @media (max-width:820px) {
+    .tool.on, .bottom { grid-template-columns:minmax(0,1fr); }
+  }
+  @media (max-width:600px) {
+    .app { padding:12px 12px 20px; gap:14px; }
+    .hero { grid-template-columns:minmax(0,1fr); padding:20px 18px 0; border-radius:22px; }
+    .hero-txt { padding-bottom:0; }
+    .hero { padding-bottom:20px; }
+    .hero-txt .eyebrow, .hero h1, .hero p { padding-right:78px; }
+    .mascot { position:absolute; top:12px; right:10px; width:74px; }
+    .mascot img { margin:0; }
+    .bubble { display:none; }
+    .search .btn { padding:10px 14px; }
+    .card { padding:16px; border-radius:20px; }
+    .big { font-size:60px; width:84px; height:84px; }
+    .book { grid-template-columns:92px 1fr; gap:14px; padding:18px; }
+    .book h3 { font-size:19px; }
+    .mailrow { flex-direction:column; }
+  }
+  @media (prefers-reduced-motion:reduce) { *, *::before, *::after { animation:none !important; transition:none !important; } }
 </style>
 </head>
 <body>
-
-<div class="topbar">
-  <div class="logo-text">Mandarin <span>Zest</span></div>
-</div>
-
 <div class="app">
 
-  <div class="hero">
-    <div class="hero-chars"><span class="c1">笔</span><span class="c2">顺</span><span class="c3">练</span><span class="c4">习</span></div>
-    <h1>Chinese Stroke Order</h1>
-    <p>Animate and practise any Chinese character stroke by stroke</p>
-  </div>
-
-  <div class="search-card">
-    <div class="search-label">Enter any Chinese character</div>
-    <div class="search-row">
-      <input class="char-input" id="charInput" type="text" maxlength="2" placeholder="e.g. 你" autocomplete="off" autocorrect="off" spellcheck="false">
-      <button class="search-btn" onclick="loadChar()">Show strokes →</button>
+  <section class="hero">
+    <div class="hero-txt">
+      <div class="eyebrow">Free tool · 笔顺</div>
+      <h1>Write any character in the <em>right order</em></h1>
+      <p>Watch each stroke, then try it yourself with your finger or mouse. Over 9,000 characters.</p>
+      <form class="search" id="searchForm" autocomplete="off">
+        <input id="charInput" type="text" maxlength="4" placeholder="Type a character, e.g. 你" aria-label="Chinese character" autocorrect="off" spellcheck="false">
+        <button class="btn" type="submit">Show strokes</button>
+      </form>
+      <div class="chips" id="chips"><span>Try:</span></div>
     </div>
-  </div>
-
-  <div class="loading-msg" id="loadingMsg">
-    <div class="spinner"></div>
-    Loading character data…
-  </div>
-
-  <div class="error-msg" id="errorMsg"></div>
-
-  <div class="display-area" id="displayArea">
-    <div class="char-info-bar fade-in">
-      <div class="char-big" id="infoBig"></div>
-      <div class="char-details">
-        <div class="char-pinyin" id="infoPinyin"></div>
-        <div class="char-meaning" id="infoMeaning"></div>
-        <div class="char-tags" id="infoTags"></div>
-      </div>
+    <div class="mascot" aria-hidden="true">
+      <div class="bubble zh" id="bubble">一笔一画！</div>
+      <img src="mascot-reading.png" alt="">
     </div>
+  </section>
 
-    <div class="writer-card fade-in">
-      <div class="writer-card-title">Stroke order</div>
-      <div class="tab-row">
-        <button class="tab-btn active" id="tabAnimate" onclick="switchTab('animate')">▶ Animate</button>
-        <button class="tab-btn" id="tabQuiz"    onclick="switchTab('quiz')">✏ Practise</button>
+  <div class="msg" id="loadingMsg"><span class="spinner"></span>Loading the strokes…</div>
+  <div class="msg err" id="errorMsg" role="alert"></div>
+
+  <section class="tool" id="tool">
+    <div class="card fade">
+      <div class="tabs" role="tablist">
+        <button class="tab on" id="tabAnimate" role="tab" type="button" onclick="switchTab('animate')">▶ Watch</button>
+        <button class="tab" id="tabQuiz" role="tab" type="button" onclick="switchTab('quiz')">✍ Practise</button>
       </div>
-      <div class="canvas-wrap">
+      <div class="stage">
+        <svg class="grid" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
+          <g stroke="#f3d9cc" stroke-width=".5" stroke-dasharray="2 2" fill="none">
+            <line x1="50" y1="0" x2="50" y2="100"/><line x1="0" y1="50" x2="100" y2="50"/>
+            <line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/>
+          </g>
+        </svg>
         <div id="hanzi-target"></div>
-        <div class="stroke-counter">Strokes: <span id="strokeCount">—</span></div>
+        <div class="count"><span id="strokeCount">—</span> strokes</div>
       </div>
 
       <div id="animateControls">
         <div class="controls">
-          <button class="ctrl-btn primary" id="btnAnimate" onclick="doAnimate()">▶ Play</button>
-          <button class="ctrl-btn" onclick="doReset()">↺ Reset</button>
-          <button class="ctrl-btn green-btn" id="btnLoop" onclick="doLoopToggle()">⟳ Loop: Off</button>
+          <button class="btn" id="btnAnimate" type="button" onclick="doAnimate()">▶ Play</button>
+          <button class="btn ghost" type="button" onclick="doStep()">Next stroke ›</button>
+          <button class="btn ghost" id="btnLoop" type="button" onclick="doLoopToggle()">⟳ Loop</button>
+          <button class="btn ghost" type="button" onclick="doReset()">↺</button>
         </div>
-        <div class="speed-row">
-          <div class="speed-label">Speed</div>
-          <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1" oninput="updateSpeed()">
-          <div class="speed-val" id="speedVal">1×</div>
-        </div>
-        <div class="stroke-dots" id="animDots"></div>
+        <div class="speed"><label for="speedSlider">Speed</label><input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1" oninput="updateSpeed()"><b id="speedVal">1×</b></div>
+        <div class="dots" id="animDots" aria-hidden="true"></div>
       </div>
 
       <div id="quizControls" style="display:none">
-        <div class="quiz-hint">Draw the character stroke by stroke in the correct order</div>
+        <p class="hint" style="margin-top:14px">Draw each stroke in order on the grid.</p>
         <div class="controls">
-          <button class="ctrl-btn primary" onclick="startQuiz()">✏ Start practise</button>
-          <button class="ctrl-btn" onclick="doReset()">↺ Reset</button>
+          <button class="btn" type="button" onclick="startQuiz()">✍ Start</button>
+          <button class="btn ghost on" id="btnOutline" type="button" onclick="toggleOutline()">Outline: on</button>
+          <button class="btn ghost" type="button" onclick="startQuiz()">↺ Again</button>
         </div>
-        <div class="quiz-result" id="quizResult"></div>
+        <div class="result" id="quizResult" aria-live="polite"></div>
       </div>
     </div>
 
-    <div class="breakdown-card fade-in">
-      <div class="breakdown-title">Individual strokes</div>
-      <div class="breakdown-grid" id="breakdownGrid"></div>
+    <div class="side">
+      <div class="card info fade">
+        <div class="big" id="infoBig"></div>
+        <div>
+          <div><span class="pinyin" id="infoPinyin"></span><button class="speak" id="speakBtn" type="button" aria-label="Hear it" title="Hear it">🔊</button></div>
+          <div class="meaning" id="infoMeaning"></div>
+          <div class="tags" id="infoTags"></div>
+        </div>
+      </div>
+      <div class="card fade" id="breakdownCard">
+        <h2>Stroke by stroke</h2>
+        <div class="strokes" id="breakdownGrid"></div>
+        <p class="tip">Tap a box to replay that stroke. Rule of thumb: top before bottom, left before right, outside before inside, and close the box last.</p>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="credit">
-    Stroke data powered by <a href="https://hanziwriter.org" target="_blank">HanziWriter</a> &amp; the open-source <a href="https://github.com/skishore/makemeahanzi" target="_blank">Make Me a Hanzi</a> dataset
-  </div>
+  <section class="bottom">
+    <a class="book" id="bookLink" href="https://www.mandarinzest.com/shop/textbooks-3/unlocking-chinese-characters-a-guide-on-understanding-the-chinese-writing-system-26" target="_blank" rel="noopener" style="text-decoration:none">
+      <img src="cover-characters.jpg" alt="Unlocking Chinese Characters book cover" width="130" height="184">
+      <div>
+        <div class="eyebrow">★ Our best seller</div>
+        <h3>Unlocking Chinese Characters</h3>
+        <p>Tired of “just memorise it”? Learn how characters were created, how radicals work and where the pronunciation clues hide, so new characters start to make sense.</p>
+        <div class="price"><b>US$17.10</b><s>US$19</s> with code <span class="code">WELCOME01</span></div>
+        <span class="btn">See the book ↗</span>
+      </div>
+    </a>
+    <form class="mail" id="mailForm" novalidate>
+      <div class="eyebrow">Free, every week</div>
+      <h3>One character, explained, in your inbox</h3>
+      <p>Short tips on characters, words and how Chinese really works. No spam.</p>
+      <div class="mailrow">
+        <input id="mailInput" type="email" placeholder="Your email" autocomplete="email" aria-label="Your email" maxlength="120">
+        <button class="btn" type="submit">Subscribe</button>
+      </div>
+      <label class="consent"><input type="checkbox" id="mailOk">I agree to receive emails from Mandarin Zest. I can unsubscribe at any time.</label>
+      <div class="mailmsg" id="mailMsg" aria-live="polite"></div>
+    </form>
+  </section>
 
+  <div class="credit">Stroke data from <a href="https://hanziwriter.org" target="_blank" rel="noopener">HanziWriter</a> and the open-source <a href="https://github.com/skishore/makemeahanzi" target="_blank" rel="noopener">Make Me a Hanzi</a> project.</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
@@ -648,271 +714,283 @@ function lookupChar(char) {
     });
 }
 
+
+// ── Settings ──────────────────────────────────────────────────
+// Emails go to the same Google Sheet as "Start here" and the HSK test.
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbwPWbx4dg8r7HWMa_uMV-2ZH6Xis7VnzEWvUgVc8G3AUzY4lnrtaooCZGgsDrwHZ9VMYg/exec";
+const EXAMPLES = ['你','好','学','中','爱','谢','龙','茶'];
+const CHEERS = ['一笔一画！','加油！','慢慢来～','好看！','写得好！'];
+
 // ── State ─────────────────────────────────────────────────────
-let writer        = null;
-let charData      = null;
-let totalStrokes  = 0;
-let currentStroke = 0;
-let isLooping     = false;
-let isAnimating   = false;
-let currentTab    = 'animate';
-let animSpeed     = 1;
+let writer = null, charData = null, curChar = '';
+let totalStrokes = 0, stepIdx = 0;
+let isLooping = false, isAnimating = false, runId = 0;
+let currentTab = 'animate', animSpeed = 1, showOutline = true;
+const $ = id => document.getElementById(id);
 
-document.getElementById('charInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') loadChar();
+// Chips
+EXAMPLES.forEach(c => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'chip'; b.textContent = c; b.setAttribute('aria-label', 'Show ' + c);
+  b.onclick = () => { $('charInput').value = c; loadChar(); };
+  $('chips').appendChild(b);
 });
+$('searchForm').addEventListener('submit', e => { e.preventDefault(); loadChar(); });
 
-// ── Load character ────────────────────────────────────────────
-function loadChar() {
-  const raw = document.getElementById('charInput').value.trim();
-  if (!raw) return;
-  const char = [...raw][0];
-  document.getElementById('charInput').value = char;
+function say(t) { const b = $('bubble'); b.textContent = t; b.style.animation = 'none'; b.offsetWidth; b.style.animation = ''; }
 
-  // Reset UI
-  document.getElementById('displayArea').style.display = 'none';
-  document.getElementById('errorMsg').style.display   = 'none';
-  document.getElementById('loadingMsg').style.display = 'block';
-  document.getElementById('hanzi-target').innerHTML   = '';
+function loadChar(scroll = true) {
+  const raw = $('charInput').value.trim();
+  const char = [...raw].find(ch => /\p{Script=Han}/u.test(ch));
+  if (!char) {
+    if (raw) { $('errorMsg').innerHTML = '<strong>Please type a Chinese character</strong>, for example 你 or 学.'; $('errorMsg').style.display = 'block'; }
+    return;
+  }
+  $('charInput').value = char;
+  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.textContent === char));
+  $('errorMsg').style.display = 'none';
+  $('loadingMsg').style.display = 'block';
+  runId++; isLooping = false; isAnimating = false;
 
-  // Destroy old writer safely
-  writer = null; charData = null;
-  isLooping = false; isAnimating = false; currentStroke = 0;
-
-  // Fetch character JSON directly — confirms existence before creating writer
-  fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@latest/${encodeURIComponent(char)}.json`)
+  fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${encodeURIComponent(char)}.json`)
     .then(r => { if (!r.ok) throw new Error(); return r.json(); })
     .then(data => {
-      charData = data;
-      document.getElementById('loadingMsg').style.display = 'none';
-      buildWriter(char, data); // async — doesn't need await here
+      $('loadingMsg').style.display = 'none';
+      charData = data; curChar = char;
+      buildWriter(char, data);
+      say(CHEERS[Math.floor(Math.random() * CHEERS.length)]);
+      if (scroll) $('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      try { history.replaceState(null, '', '?char=' + encodeURIComponent(char)); } catch (e) {}
     })
     .catch(() => {
-      document.getElementById('loadingMsg').style.display = 'none';
-      const err = document.getElementById('errorMsg');
-      err.innerHTML = `<strong>"${char}" not found.</strong> HanziWriter covers 9,000+ characters — try a different one.`;
-      err.style.display = 'block';
+      $('loadingMsg').style.display = 'none';
+      $('errorMsg').innerHTML = `<strong>We couldn't find “${char}”.</strong> Try another character, most of the 9,000 common ones are here.`;
+      $('errorMsg').style.display = 'block';
     });
 }
 
-// ── Build writer from pre-fetched data ────────────────────────
-function buildWriter(char, data) {
-  totalStrokes = data.strokes.length;
+function stageSize() { return Math.round($('hanzi-target').getBoundingClientRect().width) || 300; }
 
+function buildWriter(char, data) {
+  totalStrokes = data.strokes.length; stepIdx = 0;
+  $('hanzi-target').innerHTML = '';
+  $('tool').classList.add('on');
+  const size = stageSize();
   writer = HanziWriter.create('hanzi-target', char, {
-    width: 280,
-    height: 280,
-    padding: 24,
-    showOutline: true,
-    strokeColor: '#1c1c1c',
-    outlineColor: '#ecddd5',
-    drawingColor: '#f37a48',
-    drawingWidth: 4,
-    strokeAnimationSpeed: 1,
-    delayBetweenStrokes: 200,
-    charDataLoader: (_char, onLoad, _onError) => { onLoad(data); },
+    width: size, height: size, padding: Math.round(size * 0.08),
+    showOutline: true, strokeColor: '#2a2420', outlineColor: '#f3d9cc',
+    highlightColor: '#f37a48', drawingColor: '#f37a48', drawingWidth: 5,
+    radicalColor: '#1b6f1b', strokeAnimationSpeed: 1, delayBetweenStrokes: 200,
+    charDataLoader: (_c, onLoad) => onLoad(data),
   });
 
-  // Populate UI
-  document.getElementById('strokeCount').textContent = totalStrokes;
-  document.getElementById('infoBig').textContent = char;
-  document.getElementById('infoMeaning').textContent = '';
-  document.getElementById('infoTags').innerHTML =
-    `<div class="char-tag">${totalStrokes} stroke${totalStrokes===1?'':'s'}</div>`;
+  $('strokeCount').textContent = totalStrokes;
+  $('infoBig').textContent = char;
+  const tags = [`<span class="tag o">${totalStrokes} stroke${totalStrokes === 1 ? '' : 's'}</span>`];
+  if (data.radStrokes && data.radStrokes.length && data.radStrokes.length < totalStrokes) tags.push('<span class="tag">Radical in green</span>');
+  $('infoTags').innerHTML = tags.join('');
 
   buildDots('animDots', totalStrokes);
   buildBreakdown(data);
+  switchTab('animate');
 
-  document.getElementById('displayArea').style.display = 'block';
-  document.getElementById('displayArea').scrollIntoView({ behavior:'smooth', block:'start' });
-
-  // Reset tab
-  currentTab = 'animate';
-  ['animate','quiz'].forEach(t => {
-    document.getElementById(`tab${t[0].toUpperCase()+t.slice(1)}`).classList.toggle('active', t==='animate');
-    document.getElementById(`${t}Controls`).style.display = t==='animate' ? 'block' : 'none';
+  $('infoPinyin').textContent = PINYIN[char] || '…';
+  $('infoMeaning').textContent = MEANINGS[char] || '';
+  if (!PINYIN[char]) lookupChar(char).then(d => {
+    if (curChar !== char) return;
+    $('infoPinyin').textContent = d.pinyin || '';
+    $('infoMeaning').textContent = d.meaning || '';
   });
-  updateDots('animDots', 0, -1);
-  document.getElementById('btnAnimate').disabled = false;
-  document.getElementById('btnLoop').textContent = '⟳ Loop: Off';
-  writer.showCharacter({ duration: 0 });
-
-  // Look up pinyin + meaning (instant if in built-in table, API fallback otherwise)
-  document.getElementById('infoPinyin').textContent  = PINYIN[char] || '';
-  document.getElementById('infoMeaning').textContent = MEANINGS[char] || '';
-  if (!PINYIN[char]) {
-    document.getElementById('infoPinyin').textContent = '…';
-    lookupChar(char).then(dict => {
-      document.getElementById('infoPinyin').textContent  = dict.pinyin  || '';
-      document.getElementById('infoMeaning').textContent = dict.meaning || '';
-    });
-  }
 }
+
+// Hear it (uses the device's Chinese voice when there is one)
+$('speakBtn').onclick = () => {
+  if (!curChar || !window.speechSynthesis) return;
+  const u = new SpeechSynthesisUtterance(curChar); u.lang = 'zh-CN'; u.rate = 0.8;
+  const v = speechSynthesis.getVoices().find(v => /^zh(-|_)?(CN|Hans)?/i.test(v.lang));
+  if (v) u.voice = v;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+};
+if (!window.speechSynthesis) $('speakBtn').style.display = 'none';
 
 // ── Dots ──────────────────────────────────────────────────────
 function buildDots(id, total) {
-  const el = document.getElementById(id);
-  el.innerHTML = '';
-  for (let i = 0; i < total; i++) {
-    const d = document.createElement('div');
-    d.className = 'stroke-dot';
-    d.id = `${id}-${i}`;
-    el.appendChild(d);
-  }
+  const el = $(id); el.innerHTML = '';
+  for (let i = 0; i < total; i++) { const d = document.createElement('div'); d.className = 'dot'; d.id = `${id}-${i}`; el.appendChild(d); }
 }
 function updateDots(id, upTo, cur) {
   for (let i = 0; i < totalStrokes; i++) {
-    const d = document.getElementById(`${id}-${i}`);
-    if (!d) continue;
-    d.className = 'stroke-dot' + (i < upTo ? ' done' : '') + (i === cur ? ' current' : '');
+    const d = $(`${id}-${i}`); if (d) d.className = 'dot' + (i < upTo ? ' done' : '') + (i === cur ? ' current' : '');
   }
 }
 
-// ── Tab switcher ──────────────────────────────────────────────
+// ── Tabs ──────────────────────────────────────────────────────
 function switchTab(tab) {
   if (!writer) return;
-  currentTab = tab;
-  ['animate','quiz'].forEach(t => {
-    const el = document.getElementById(`tab${t[0].toUpperCase()+t.slice(1)}`);
-    if (el) el.classList.toggle('active', t===tab);
-    const ctrl = document.getElementById(`${t}Controls`);
-    if (ctrl) ctrl.style.display = t===tab ? 'block' : 'none';
-  });
-
-  isLooping   = false;
-  isAnimating = false;
-  document.getElementById('btnLoop').textContent   = '⟳ Loop: Off';
-  document.getElementById('btnAnimate').disabled   = false;
-  document.getElementById('quizResult').style.display = 'none';
-
-  const bc = document.querySelector('.breakdown-card');
-  if (bc) bc.style.display = tab === 'quiz' ? 'none' : 'block';
-
+  currentTab = tab; runId++;
+  isLooping = false; isAnimating = false; stepIdx = 0;
+  $('tabAnimate').classList.toggle('on', tab === 'animate');
+  $('tabQuiz').classList.toggle('on', tab === 'quiz');
+  $('animateControls').style.display = tab === 'animate' ? 'block' : 'none';
+  $('quizControls').style.display = tab === 'quiz' ? 'block' : 'none';
+  $('btnLoop').classList.remove('on');
+  $('btnAnimate').disabled = false;
+  $('quizResult').className = 'result';
+  try { writer.cancelQuiz(); } catch (e) {}
   if (tab === 'animate') {
-    writer.hideCharacter({ duration:0 });
-    writer.showCharacter({ duration:0 });
+    writer.showOutline({ duration: 0 });
+    writer.showCharacter({ duration: 0 });
     updateDots('animDots', 0, -1);
   } else {
-    writer.hideCharacter({ duration:0 });
+    startQuiz();
   }
 }
 
-// ── Animate tab ───────────────────────────────────────────────
+// ── Watch ─────────────────────────────────────────────────────
 function doAnimate() {
   if (!writer || isAnimating) return;
-  writer.hideCharacter({ duration:0 });
-  isAnimating = true;
-  document.getElementById('btnAnimate').disabled = true;
+  writer.hideCharacter({ duration: 0 });
+  isAnimating = true; stepIdx = 0;
+  $('btnAnimate').disabled = true;
   updateDots('animDots', 0, -1);
-  runStroke(0);
+  runStroke(0, ++runId);
 }
-
-function runStroke(idx) {
+function runStroke(idx, id) {
+  if (id !== runId) return;
   if (idx >= totalStrokes) {
-    isAnimating = false;
-    document.getElementById('btnAnimate').disabled = false;
+    isAnimating = false; $('btnAnimate').disabled = false; stepIdx = 0;
     updateDots('animDots', totalStrokes, -1);
-    if (isLooping) {
-      setTimeout(() => {
-        if (!isLooping) return;
-        writer.hideCharacter({ duration:0 });
-        updateDots('animDots', 0, -1);
-        setTimeout(() => { isAnimating = true; document.getElementById('btnAnimate').disabled = true; runStroke(0); }, 600);
-      }, 1000);
-    }
+    if (isLooping) setTimeout(() => {
+      if (!isLooping || id !== runId) return;
+      writer.hideCharacter({ duration: 0 }); updateDots('animDots', 0, -1);
+      setTimeout(() => { if (!isLooping || id !== runId) return; isAnimating = true; $('btnAnimate').disabled = true; runStroke(0, id); }, 500);
+    }, 1000);
     return;
   }
   updateDots('animDots', idx, idx);
   writer.animateStroke(idx, {
     strokeAnimationSpeed: animSpeed,
     onComplete: () => {
-      updateDots('animDots', idx+1, -1);
-      setTimeout(() => runStroke(idx+1), Math.max(50, Math.round(200/animSpeed)));
+      if (id !== runId) return;
+      updateDots('animDots', idx + 1, -1);
+      setTimeout(() => runStroke(idx + 1, id), Math.max(50, Math.round(220 / animSpeed)));
     }
   });
 }
-
+// One stroke at a time
+function doStep() {
+  if (!writer) return;
+  if (isAnimating) { runId++; isAnimating = false; isLooping = false; $('btnLoop').classList.remove('on'); $('btnAnimate').disabled = false; }
+  if (stepIdx === 0 || stepIdx >= totalStrokes) { writer.hideCharacter({ duration: 0 }); stepIdx = 0; }
+  const i = stepIdx++;
+  updateDots('animDots', i, i);
+  writer.animateStroke(i, { strokeAnimationSpeed: animSpeed, onComplete: () => updateDots('animDots', i + 1, -1) });
+  if (stepIdx >= totalStrokes) setTimeout(() => say('完成！'), 400);
+}
 function doReset() {
   if (!writer) return;
-  isLooping   = false;
-  isAnimating = false;
-  document.getElementById('btnLoop').textContent    = '⟳ Loop: Off';
-  document.getElementById('btnAnimate').disabled    = false;
-  document.getElementById('quizResult').style.display = 'none';
-  writer.hideCharacter({ duration:0 });
-  if (currentTab === 'animate') {
-    writer.showCharacter({ duration:0 });
-    updateDots('animDots', 0, -1);
-  }
+  runId++; isLooping = false; isAnimating = false; stepIdx = 0;
+  $('btnLoop').classList.remove('on'); $('btnAnimate').disabled = false;
+  writer.showCharacter({ duration: 0 });
+  updateDots('animDots', 0, -1);
 }
-
 function doLoopToggle() {
   isLooping = !isLooping;
-  document.getElementById('btnLoop').textContent = `⟳ Loop: ${isLooping?'On':'Off'}`;
+  $('btnLoop').classList.toggle('on', isLooping);
   if (isLooping && !isAnimating) doAnimate();
 }
-
 function updateSpeed() {
-  animSpeed = parseFloat(document.getElementById('speedSlider').value);
-  document.getElementById('speedVal').textContent = animSpeed.toFixed(1).replace(/\.0$/,'')+'×';
+  animSpeed = parseFloat($('speedSlider').value);
+  $('speedVal').textContent = animSpeed.toFixed(1).replace(/\.0$/, '') + '×';
 }
 
-// ── Quiz tab ──────────────────────────────────────────────────
+// ── Practise ──────────────────────────────────────────────────
 function startQuiz() {
   if (!writer) return;
-  document.getElementById('quizResult').style.display = 'none';
+  $('quizResult').className = 'result';
+  writer.hideCharacter({ duration: 0 });
+  showOutline ? writer.showOutline({ duration: 0 }) : writer.hideOutline({ duration: 0 });
   writer.quiz({
-    onMistake: d => {
-      const r = document.getElementById('quizResult');
-      r.className = 'quiz-result err';
-      r.textContent = `Incorrect — try stroke ${d.strokeNum+1} again`;
-      r.style.display = 'block';
-    },
+    showHintAfterMisses: 2, leniency: 1.1,
+    onMistake: d => { const r = $('quizResult'); r.className = 'result bad'; r.textContent = `Not quite. Try stroke ${d.strokeNum + 1} again${d.mistakesOnStroke >= 2 ? ' (follow the orange hint)' : ''}.`; },
     onCorrectStroke: d => {
-      const r = document.getElementById('quizResult');
-      r.className = 'quiz-result ok';
-      r.textContent = `✓ Stroke ${d.strokeNum+1} correct! ${d.strokeNum+1<totalStrokes ? (totalStrokes-d.strokeNum-1)+' to go.' : ''}`;
-      r.style.display = 'block';
+      const r = $('quizResult'), left = totalStrokes - d.strokeNum - 1;
+      r.className = 'result ok'; r.textContent = `✓ Stroke ${d.strokeNum + 1}${left ? ` · ${left} to go` : ''}`;
     },
     onComplete: s => {
-      const r = document.getElementById('quizResult');
-      r.className = 'quiz-result ok';
-      r.textContent = `🎉 完成！ ${s.totalMistakes===0?'Perfect — no mistakes!':'Completed with '+s.totalMistakes+' mistake'+(s.totalMistakes===1?'':'s')+'.'}`; 
-      r.style.display = 'block';
+      const r = $('quizResult'); r.className = 'result ok';
+      r.textContent = s.totalMistakes === 0 ? '🎉 完成！ Perfect, no mistakes.' : `🎉 完成！ Done with ${s.totalMistakes} mistake${s.totalMistakes === 1 ? '' : 's'}. Again without the outline?`;
+      say(s.totalMistakes === 0 ? '太棒了！' : '很好！');
     }
   });
 }
+function toggleOutline() {
+  showOutline = !showOutline;
+  const b = $('btnOutline'); b.classList.toggle('on', showOutline); b.textContent = 'Outline: ' + (showOutline ? 'on' : 'off');
+  startQuiz();
+}
 
-// ── Stroke breakdown grid ─────────────────────────────────────
+// ── Stroke breakdown ──────────────────────────────────────────
 function buildBreakdown(data) {
-  const grid = document.getElementById('breakdownGrid');
-  grid.innerHTML = '';
-  data.strokes.forEach((stroke, idx) => {
-    const item = document.createElement('div');
-    item.className = 'breakdown-item';
-
-    const num = document.createElement('div');
-    num.className = 'breakdown-num';
-    num.textContent = idx+1;
-
-    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 1024 1024');
-    svg.setAttribute('class','breakdown-svg');
-
+  const grid = $('breakdownGrid'); grid.innerHTML = '';
+  data.strokes.forEach((_, idx) => {
+    const item = document.createElement('button');
+    item.type = 'button'; item.className = 'st'; item.setAttribute('aria-label', 'Replay stroke ' + (idx + 1));
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 1024 1024');
     data.strokes.forEach((s, i) => {
       if (i > idx) return;
-      const path = document.createElementNS('http://www.w3.org/2000/svg','path');
-      path.setAttribute('d', s);
-      path.setAttribute('fill', i===idx ? '#f37a48' : '#ddd');
-      path.setAttribute('transform','scale(1,-1) translate(0,-900)');
-      svg.appendChild(path);
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('d', s);
+      p.setAttribute('fill', i === idx ? '#f37a48' : '#d8ccc4');
+      p.setAttribute('transform', 'scale(1,-1) translate(0,-900)');
+      svg.appendChild(p);
     });
-
-    item.appendChild(num);
-    item.appendChild(svg);
+    const n = document.createElement('i'); n.textContent = idx + 1;
+    item.append(svg, n);
+    item.onclick = () => {
+      if (currentTab !== 'animate') switchTab('animate');
+      runId++; isAnimating = false; isLooping = false; $('btnLoop').classList.remove('on'); $('btnAnimate').disabled = false;
+      writer.hideCharacter({ duration: 0 });
+      // draw earlier strokes instantly, then animate this one
+      let k = 0;
+      const next = () => {
+        if (k < idx) { writer.animateStroke(k++, { strokeAnimationSpeed: 10, onComplete: next }); }
+        else { updateDots('animDots', idx, idx); writer.animateStroke(idx, { strokeAnimationSpeed: animSpeed, onComplete: () => updateDots('animDots', idx + 1, -1) }); stepIdx = idx + 1; }
+      };
+      next();
+    };
     grid.appendChild(item);
   });
 }
+
+// Keep the drawing sharp when the frame is resized
+let rT;
+window.addEventListener('resize', () => {
+  clearTimeout(rT);
+  rT = setTimeout(() => { if (writer && charData && Math.abs(stageSize() - writer._options.width) > 20) buildWriter(curChar, charData); }, 250);
+});
+
+// ── Email ─────────────────────────────────────────────────────
+$('mailForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const email = $('mailInput').value.trim(), m = $('mailMsg');
+  m.className = 'mailmsg';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { m.textContent = 'Please check your email address.'; return; }
+  if (!$('mailOk').checked) { m.textContent = 'Please tick the box so we can email you.'; return; }
+  try {
+    fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ email, source: 'stroke-order' + (curChar ? ' | ' + curChar : ''), timestamp: new Date().toISOString() }) }).catch(() => {});
+  } catch (err) {}
+  m.className = 'mailmsg ok'; m.textContent = "You're in! Your first email is on its way.";
+  $('mailForm').querySelector('button').disabled = true;
+});
+
+// ── Start ─────────────────────────────────────────────────────
+const startChar = new URLSearchParams(location.search).get('char');
+$('charInput').value = startChar || '你';
+if (window.HanziWriter) loadChar(false);
+else window.addEventListener('load', () => loadChar(false));
 </script>
 </body>
 </html>
