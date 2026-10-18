@@ -47,9 +47,9 @@
   .chip { border:1.5px solid var(--peach2); background:#fff; border-radius:12px; font-size:18px; width:40px; height:40px; cursor:pointer; font-family:'Noto Sans SC',sans-serif; color:var(--ink); transition:transform .15s, border-color .15s; }
   .chip:hover { transform:translateY(-2px); border-color:var(--orange); }
   .chip.on { background:var(--orange); border-color:var(--orange); }
-  .mascot { position:relative; width:190px; align-self:end; }
-  .mascot img { display:block; width:100%; height:auto; margin-bottom:-56px; }
-  .bubble { position:absolute; top:6px; right:150px; background:#fff; border-radius:16px; padding:8px 12px; font-size:14px; font-weight:700; box-shadow:0 6px 16px rgba(42,36,32,.08); white-space:nowrap; animation:bob 3s ease-in-out infinite; }
+  .mascot { position:relative; width:150px; align-self:end; }
+  .mascot img { display:block; width:100%; height:auto; margin-bottom:-6px; }
+  .bubble { position:absolute; top:10px; right:118px; background:#fff; border-radius:16px; padding:8px 12px; font-size:14px; font-weight:700; box-shadow:0 6px 16px rgba(42,36,32,.08); white-space:nowrap; animation:bob 3s ease-in-out infinite; }
   .bubble::after { content:""; position:absolute; right:-6px; top:16px; border:7px solid transparent; border-left-color:#fff; border-right:0; }
   @keyframes bob { 50% { transform:translateY(-4px); } }
 
@@ -104,10 +104,28 @@
 
   /* bottom: book + email */
   .bottom { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:18px; }
-  .book { display:grid; grid-template-columns:130px 1fr; gap:20px; align-items:center; background:var(--green-d); color:#fff; border-radius:26px; padding:22px; position:relative; overflow:hidden; }
+  .book { display:grid; grid-template-columns:190px 1fr; gap:22px; align-items:center; background:var(--green-d); color:#fff; border-radius:26px; padding:22px 26px; position:relative; overflow:hidden; }
   .book::before { content:"字"; position:absolute; right:-14px; bottom:-48px; font-family:'Noto Sans SC',sans-serif; font-size:190px; font-weight:700; color:rgba(255,255,255,.05); pointer-events:none; }
-  .book img { width:100%; border-radius:6px; box-shadow:0 14px 30px rgba(0,0,0,.35); transform:rotate(-3deg); transition:transform .3s; }
-  .book:hover img { transform:rotate(0) scale(1.03); }
+  .book > div { position:relative; }
+  .pages { position:relative; width:170px; height:220px; margin:0 auto; }
+  .pg { position:absolute; display:block; background:#fff; border-radius:4px; box-sizing:border-box; box-shadow:0 18px 34px rgba(0,0,0,.35),0 2px 6px rgba(0,0,0,.2); transform:rotate(var(--r)); animation:float 5s ease-in-out infinite; transition:--r .35s; }
+  @property --r { syntax:'<angle>'; inherits:false; initial-value:0deg; }
+  .f2 { animation-delay:-1.6s; } .f3 { animation-delay:-3.2s; }
+  @keyframes float { 0%,100% { transform:rotate(var(--r)) translateY(0); } 50% { transform:rotate(var(--r)) translateY(-7px); } }
+  .sheet { left:-6px; top:22px; width:118px; height:162px; padding:9px; --r:-11deg; }
+  .lesson { left:62px; top:6px; width:118px; height:162px; padding:10px; --r:9deg; }
+  .cover { left:22px; top:44px; width:124px; height:auto; --r:-3deg; }
+  .book:hover .sheet { --r:-16deg; } .book:hover .lesson { --r:14deg; }
+  .pg-t { font-size:7px; font-weight:800; color:var(--green); margin-bottom:4px; }
+  .sgrid { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid #e9ddd5; }
+  .sgrid i { aspect-ratio:1; border:1px dashed #f0e4dc; display:flex; align-items:center; justify-content:center; font-style:normal; font-family:'Noto Sans SC',sans-serif; font-size:15px; color:transparent; }
+  .sgrid i.s0 { color:var(--ink); } .sgrid i.s1 { color:#e7d9cf; }
+  .pg-l { font-size:6.5px; font-weight:800; color:var(--orange); letter-spacing:.08em; }
+  .pg-h { font-size:8.5px; font-weight:800; color:var(--green); line-height:1.15; margin:2px 0 6px; }
+  .eq { display:flex; align-items:center; justify-content:center; gap:4px; font-family:'Noto Sans SC',sans-serif; font-size:19px; font-weight:700; color:var(--ink); background:#e9f6e9; border-radius:6px; padding:8px 0; }
+  .eq small { font-size:10px; color:var(--muted); } .eq .o { color:var(--orange); }
+  .lines { margin-top:7px; display:flex; flex-direction:column; gap:3.5px; }
+  .lines b { display:block; height:3px; background:#eadfd8; border-radius:2px; width:100%; }
   .book .eyebrow { color:#ffb48f; }
   .book h3 { margin:6px 0 6px; font-size:22px; line-height:1.15; font-weight:800; }
   .book p { margin:0 0 12px; color:#d9e8d9; font-size:14.5px; line-height:1.45; }
@@ -140,13 +158,14 @@
     .hero-txt { padding-bottom:0; }
     .hero { padding-bottom:20px; }
     .hero-txt .eyebrow, .hero h1, .hero p { padding-right:78px; }
-    .mascot { position:absolute; top:12px; right:10px; width:74px; }
+    .mascot { position:absolute; top:12px; right:12px; width:62px; }
     .mascot img { margin:0; }
     .bubble { display:none; }
     .search .btn { padding:10px 14px; }
     .card { padding:16px; border-radius:20px; }
     .big { font-size:60px; width:84px; height:84px; }
-    .book { grid-template-columns:92px 1fr; gap:14px; padding:18px; }
+    .book { grid-template-columns:minmax(0,1fr); gap:10px; padding:18px; }
+    .pages { transform:scale(.82); height:200px; margin-top:-14px; margin-bottom:4px; }
     .book h3 { font-size:19px; }
     .mailrow { flex-direction:column; }
   }
@@ -169,7 +188,7 @@
     </div>
     <div class="mascot" aria-hidden="true">
       <div class="bubble zh" id="bubble">一笔一画！</div>
-      <img src="mascot-reading.png" alt="">
+      <img src="mascot-writing.png" alt="">
     </div>
   </section>
 
@@ -234,7 +253,19 @@
 
   <section class="bottom">
     <a class="book" id="bookLink" href="https://www.mandarinzest.com/shop/textbooks-3/unlocking-chinese-characters-a-guide-on-understanding-the-chinese-writing-system-26" target="_blank" rel="noopener" style="text-decoration:none">
-      <img src="cover-characters.jpg" alt="Unlocking Chinese Characters book cover" width="130" height="184">
+      <div class="pages" aria-hidden="true">
+        <div class="pg f2 sheet">
+          <div class="pg-t">Practice sheet · 汉</div>
+          <div class="sgrid"><i class="s0">汉</i><i class="s1">汉</i><i class="s1">汉</i><i class="s1">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i><i class="">汉</i></div>
+        </div>
+        <div class="pg f3 lesson">
+          <div class="pg-l">LESSON 3</div>
+          <div class="pg-h">Characters as building blocks</div>
+          <div class="eq"><span>女</span><small>+</small><span>子</span><small>=</small><span class="o">好</span></div>
+          <div class="lines"><b></b><b style="width:86%"></b><b style="width:92%"></b><b style="width:60%"></b></div>
+        </div>
+        <img class="pg f1 cover" src="book-cover.jpg" alt="Unlocking Chinese Characters cover" width="124" height="181">
+      </div>
       <div>
         <div class="eyebrow">★ Our best seller</div>
         <h3>Unlocking Chinese Characters</h3>
