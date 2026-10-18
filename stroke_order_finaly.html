@@ -47,9 +47,9 @@
   .chip { border:1.5px solid var(--peach2); background:#fff; border-radius:12px; font-size:18px; width:40px; height:40px; cursor:pointer; font-family:'Noto Sans SC',sans-serif; color:var(--ink); transition:transform .15s, border-color .15s; }
   .chip:hover { transform:translateY(-2px); border-color:var(--orange); }
   .chip.on { background:var(--orange); border-color:var(--orange); }
-  .mascot { position:relative; width:150px; align-self:end; }
+  .mascot { position:relative; width:240px; align-self:end; padding-left:90px; }
   .mascot img { display:block; width:100%; height:auto; margin-bottom:-6px; }
-  .bubble { position:absolute; top:10px; right:118px; background:#fff; border-radius:16px; padding:8px 12px; font-size:14px; font-weight:700; box-shadow:0 6px 16px rgba(42,36,32,.08); white-space:nowrap; animation:bob 3s ease-in-out infinite; }
+  .bubble { position:absolute; top:10px; left:0; background:#fff; border-radius:16px; padding:8px 12px; font-size:14px; font-weight:700; box-shadow:0 6px 16px rgba(42,36,32,.08); white-space:nowrap; animation:bob 3s ease-in-out infinite; }
   .bubble::after { content:""; position:absolute; right:-6px; top:16px; border:7px solid transparent; border-left-color:#fff; border-right:0; }
   @keyframes bob { 50% { transform:translateY(-4px); } }
 
@@ -158,7 +158,7 @@
     .hero-txt { padding-bottom:0; }
     .hero { padding-bottom:20px; }
     .hero-txt .eyebrow, .hero h1, .hero p { padding-right:78px; }
-    .mascot { position:absolute; top:12px; right:12px; width:62px; }
+    .mascot { position:absolute; top:12px; right:12px; width:62px; padding-left:0; }
     .mascot img { margin:0; }
     .bubble { display:none; }
     .search .btn { padding:10px 14px; }
